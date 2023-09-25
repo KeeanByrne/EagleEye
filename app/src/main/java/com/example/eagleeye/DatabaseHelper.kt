@@ -156,6 +156,27 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
         return validUser
     }
+
+    // Function to return the ID of the user.
+    @SuppressLint("Range")
+    fun returnID(username: String): String {
+        val db = this.readableDatabase
+        var capturedID = ""
+
+        // Creating an object for the database process.
+
+        // below code returns a cursor to
+        // read data from the database
+        val rowExists = "SELECT Id FROM " + User_Table  + " WHERE Username = ?"
+        val selectionArgs = arrayOf(username)
+        val cursor = db.rawQuery(rowExists, selectionArgs)
+
+        if(cursor.moveToFirst()) {
+            capturedID = cursor.getString(cursor.getColumnIndex("Id")).toString();
+        }
+
+        return capturedID
+    }
     companion object {
 
         // Variable for the database name

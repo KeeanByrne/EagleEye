@@ -1,8 +1,10 @@
 package com.example.eagleeye
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class Signup : AppCompatActivity() {
@@ -48,6 +50,11 @@ class Signup : AppCompatActivity() {
                 txtEmailAddress.setText("");
                 txtPassword.setText("");
                 txtPasswordConfirmation.setText("");
+
+                val intent = Intent(this@Signup, Login::class.java)
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Password must match with password confirmation", Toast.LENGTH_SHORT).show()
             }
 
         }

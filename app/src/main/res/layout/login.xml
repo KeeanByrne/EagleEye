@@ -1,79 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
+        android:id="@+id/linearLayoutLogin"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#A0BFE2"
+        android:gravity="center"
+        android:padding="12dp"
         android:orientation="vertical">
 
-        <!-- The Logo and the slogan of EagleEye -->
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:orientation="vertical">
+            android:layout_width="380dp"
+            android:layout_height="150dp"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_gravity="center_horizontal"
+                app:srcCompat="@drawable/login_asset" />
 
         </LinearLayout>
 
-        <!--  -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="350dp"
-            android:orientation="vertical">
+        <EditText
+            android:id="@+id/editUsername"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/text_border"
+            android:hint="Username"
+            android:inputType="text"
+            android:paddingStart="8dp"
+            android:paddingTop="14dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="14dp" />
 
-            <EditText
-                android:id="@+id/editUsername"
-                android:layout_width="350dp"
-                android:layout_gravity="center"
-                android:layout_height="wrap_content"
-                android:hint="Username"
-                android:background="@drawable/text_border"
-                android:inputType="text"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:paddingTop="14dp"
-                android:paddingBottom="14dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"/>
+        <EditText
+            android:id="@+id/editPassword"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/text_border"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:paddingStart="8dp"
+            android:paddingTop="14dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="14dp" />
 
-            <EditText
-                android:id="@+id/editPassword"
-                android:layout_width="350dp"
-                android:layout_gravity="center"
-                android:layout_height="wrap_content"
-                android:hint="Password"
-                android:background="@drawable/text_border"
-                android:inputType="text"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:paddingTop="14dp"
-                android:paddingBottom="14dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"/>
-
-            <!-- Button for changing the profile photo -->
-            <Button
-                android:id="@+id/btnLogin"
-                android:layout_width="350dp"
-                android:layout_gravity="center"
-                android:layout_height="wrap_content"
-                android:text="Login" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:orientation="vertical">
-
-
-        </LinearLayout>
+        <!-- Button for changing the profile photo -->
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="350dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:text="Login" />
 
 
     </LinearLayout>
 
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

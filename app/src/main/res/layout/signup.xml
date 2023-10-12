@@ -49,6 +49,7 @@
                 android:paddingBottom="14dp"
                 android:paddingLeft="15dp"
 
+
                 />
 
 
@@ -113,7 +114,7 @@
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/text_border"
                 android:hint="Password"
-                android:inputType="text"
+                android:inputType="textPassword"
                 android:paddingStart="8dp"
                 android:paddingTop="14dp"
                 android:paddingEnd="8dp"
@@ -128,14 +129,14 @@
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/text_border"
                 android:hint="Password Confirmation"
-                android:inputType="text"
+                android:inputType="textPassword"
                 android:paddingStart="8dp"
                 android:paddingTop="14dp"
                 android:paddingEnd="8dp"
                 android:paddingBottom="14dp"
                 android:layout_marginBottom="10dp"/>
 
-            <!-- Button to submit the user details and to log the user in. -->
+            <!-- Button to submit the user details and to create the user profile. -->
             <Button
                 android:id="@+id/btnSaveAccount"
                 android:layout_width="360dp"
@@ -146,11 +147,8 @@
                 android:background="@drawable/register_button_background"
                 />
 
-
         </LinearLayout>
 
-
     </LinearLayout>
-
 
 </RelativeLayout>

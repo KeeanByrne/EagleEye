@@ -21,6 +21,7 @@ class Login : AppCompatActivity() {
 
         // Button to check if the user account exists.
         btn_login = findViewById(R.id.btnLogin);
+
         btn_login.setOnClickListener {
             var text_username = findViewById<EditText>(R.id.editUsername);
             var username = text_username.text.toString();

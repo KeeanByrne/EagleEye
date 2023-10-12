@@ -12,8 +12,6 @@ class Settings : AppCompatActivity() {
         setContentView(R.layout.settings) // Connecting to the settings.xml
         populateUnitSpinner(); // Populating the spinner
 
-
-
     }
 
     // Populating the unit spinner with Km and Mi.

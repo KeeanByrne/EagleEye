@@ -53,6 +53,7 @@ class Signup : AppCompatActivity() {
 
                 val intent = Intent(this@Signup, Login::class.java)
                 startActivity(intent)
+
             } else {
                 Toast.makeText(this, "Password must match with password confirmation", Toast.LENGTH_SHORT).show()
             }

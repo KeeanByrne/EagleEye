@@ -17,6 +17,8 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
     override fun onCreate(db: SQLiteDatabase) {
 
+
+
         // below is a sqlite query, where column names
         // along with their data types is given
         val user_create_query = ("CREATE TABLE " + User_Table + " ("
@@ -35,7 +37,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 "RouteColour" + " VARCHAR, " +
                 "AppMainColour" + " VARCHAR, " +
                 "DistanceMinimum" + " INTEGER, " +
-                "DistanceMaximum" + " INTEGER " +
+                "DistanceMaximum" + " INTEGER, " +
                 "FOREIGN KEY(UserID) REFERENCES " + User_Table + "(Id)" + // Define the foreign key constraint
                 ")")
 
@@ -45,7 +47,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 "Name" + " VARCHAR, " +
                 "Lattitude" + " VARCHAR, " +
                 "Longitude" + " VARCHAR, " +
-                "Counry " + "VARCHAR " +
+                "Country " + "VARCHAR " +
                 ")")
 
         // Table to have the species

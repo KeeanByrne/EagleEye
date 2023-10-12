@@ -23,6 +23,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".Observations">
+            <!-- Activity configuration -->
+        </activity>
+
+        <activity android:name=".Login">
+            <!-- Activity configuration -->
+        </activity>
+
+        <activity android:name=".Home">
+            <!-- Activity configuration -->
+        </activity>
+
     </application>
 
 </manifest>

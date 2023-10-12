@@ -156,7 +156,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"> 
 
                 <!-- Observations -->
                 <androidx.cardview.widget.CardView
@@ -164,7 +164,8 @@
                     android:layout_height="80dp"
                     android:layout_margin="16dp"
                     app:cardCornerRadius="8dp"
-                    >
+                    android:onClick="handleObservationPageClick">
+                >
 
                     <!-- Observation info -->
                     <LinearLayout

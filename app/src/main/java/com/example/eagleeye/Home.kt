@@ -3,6 +3,8 @@ package com.example.eagleeye
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 class Home: AppCompatActivity() {
@@ -12,6 +14,12 @@ class Home: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.homepage)
 
+        val settingsIcon = findViewById<ImageView>(R.id.settingsIcon)
+        settingsIcon.setOnClickListener{
+            val intent = Intent(this,Settings::class.java)
+            startActivity(intent)
+        }
+
     }
 
     fun handleObservationPageClick(view: View) {
@@ -19,6 +27,8 @@ class Home: AppCompatActivity() {
         // For example, you can open a new activity or perform some action.
 
         // Taking the user to the homepage.
+
+
 
 
         try {

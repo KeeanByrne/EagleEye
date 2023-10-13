@@ -11,7 +11,10 @@
         android:theme="@style/Theme.EagleEye"
         tools:targetApi="31">
         <activity
-            android:name=".Signup"
+            android:name=".Sighting"
+            android:exported="false" />
+        <activity
+            android:name=".Login"
             android:exported="true"
             android:label="@string/app_name"
             android:resizeableActivity="true"
@@ -23,19 +26,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".Observations">
+
             <!-- Activity configuration -->
         </activity>
+        <activity android:name=".Signup">
 
-        <activity android:name=".Login">
             <!-- Activity configuration -->
         </activity>
-
         <activity android:name=".Home">
+
             <!-- Activity configuration -->
         </activity>
-
     </application>
 
 </manifest>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Sighting">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#A0BFE2" >
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="328dp"
+                android:layout_height="150dp"
+                android:layout_gravity="bottom"
+                app:srcCompat="@drawable/sighting_asset" />
+
+            <ImageView
+                android:id="@+id/homeBtn1"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:contentDescription="Home Button"
+                android:scaleType="centerCrop"
+                android:src="@drawable/home_screen" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="241dp"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btnSaveAccount"
+                android:layout_width="300dp"
+                android:layout_height="150dp"
+                android:text="Take Photo?"
+                android:background="@drawable/take_photo_button"/>
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/birdNameTxt"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/text_border"
+            android:hint="Bird Name:"
+            android:inputType="text"
+            android:paddingStart="8dp"
+            android:paddingTop="14dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="14dp" />
+
+        <EditText
+            android:id="@+id/latinNameTxt"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/text_border"
+            android:hint="Latin Name:"
+            android:inputType="text"
+            android:paddingStart="8dp"
+            android:paddingTop="14dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="14dp" />
+
+        <EditText
+            android:id="@+id/sightingLocationTxt"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/text_border"
+            android:hint="Location:"
+            android:inputType="text"
+            android:paddingStart="8dp"
+            android:paddingTop="14dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="14dp" />
+
+        <!-- Button to submit the user details and to create the user profile. -->
+        <Button
+            android:id="@+id/btnSaveSighting"
+            android:layout_width="360dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_horizontal"
+            android:text="Save"
+            android:textColor="@color/white"
+            android:backgroundTint="#C1E1C1"
+            android:background="@drawable/button_theme"
+            android:layout_marginTop="16dp"
+            />
+    </LinearLayout>
+
+</RelativeLayout>

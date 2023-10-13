@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
@@ -15,6 +16,12 @@ class Signup : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.signup)
+
+        val loginText = findViewById<TextView>(R.id.loginText)
+        loginText.setOnClickListener{
+            val intent = Intent(this,Login::class.java)
+            startActivity(intent)
+        }
 
         // Creating an object for the database process.
         val db = DBHelper(this, null)

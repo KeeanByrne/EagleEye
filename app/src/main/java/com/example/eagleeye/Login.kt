@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.eagleeye.databinding.HomepageBinding
@@ -32,6 +33,12 @@ class Login : AppCompatActivity() {
             // Checking if the user account exists and then logging the user in.
             checkUserAccount(username, password);
 
+        }
+
+        val registerText = findViewById<TextView>(R.id.registerText)
+        registerText.setOnClickListener{
+            val intent = Intent(this,Signup::class.java)
+            startActivity(intent)
         }
 
 

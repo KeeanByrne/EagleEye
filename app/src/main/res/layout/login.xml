@@ -13,6 +13,10 @@
         android:padding="12dp"
         android:orientation="vertical">
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+
         <LinearLayout
             android:layout_width="380dp"
             android:layout_height="150dp"
@@ -57,15 +61,45 @@
             android:paddingEnd="8dp"
             android:paddingBottom="14dp" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="25dp" />
+
         <!-- Button for changing the profile photo -->
         <Button
             android:id="@+id/btnLogin"
             android:layout_width="350dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
-            android:text="Login" />
+            android:text="Login"
+            android:background="@drawable/button_theme"/>
 
+        <TextView
+            android:id="@+id/forgotPasswordText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:textSize="15dp"
+            android:text="Forgot Password?"
+            android:textColor="@color/black"
+            android:textStyle="italic"
 
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="180dp" />
+
+        <TextView
+            android:id="@+id/registerText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:textSize="15dp"
+            android:text="Don't have an account? Click here to register!"
+            android:textColor="@color/black"
+            android:textStyle="italic"
+            />
     </LinearLayout>
 
 

@@ -144,10 +144,25 @@
                 android:layout_gravity="center_horizontal"
                 android:text="Register"
                 android:backgroundTint="#C1E1C1"
-                android:background="@drawable/register_button_background"
+                android:background="@drawable/button_theme"
                 />
 
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="90dp" />
+
+        <TextView
+            android:id="@+id/loginText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:textSize="15dp"
+            android:text="Already have an account? Click here to login!"
+            android:textColor="@color/black"
+            android:textStyle="italic"
+            />
 
     </LinearLayout>
 

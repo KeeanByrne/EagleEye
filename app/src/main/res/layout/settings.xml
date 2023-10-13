@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="#A0BFE2">
 
         <!-- Header section -->
         <LinearLayout
@@ -20,52 +21,50 @@
             <!--  Header Section -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/myCardView"
+                orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:clickable="true"
+                android:contentDescription="Image representing something"
                 android:focusable="true"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp"
-                orientation="horizontal"
-                android:contentDescription="Image representing something"
-                tools:ignore="ExtraText"
-                >
+                tools:ignore="ExtraText">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <!-- TextView -->
                     <TextView
                         android:id="@+id/text_logo"
                         android:layout_width="0dp"
-                        android:layout_weight="1"                        android:layout_height="wrap_content"
-                        android:text="@string/app_name"
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:textStyle="bold"/>
+                        android:layout_weight="1"
+                        android:text="@string/app_name"
+                        android:textStyle="bold" />
 
                     <!-- ImageView -->
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:contentDescription="Image representing something"
-                        android:src="@drawable/settingstwo_icon"
                         android:scaleType="centerCrop"
-                        />
+                        android:src="@drawable/settingstwo_icon" />
 
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:contentDescription="Image representing something"
-                        android:src="@drawable/jeff_bezos"
-                        android:scaleType="centerCrop"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        />
+                        android:contentDescription="Image representing something"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/jeff_bezos" />
 
                 </LinearLayout>
 
@@ -84,40 +83,38 @@
                 android:id="@+id/settingsLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Settings"
-                android:textSize="32dp"
-                android:textColor="#000000"
-                android:layout_marginTop="8dp"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:textStyle="bold"
-                />
+                android:text="Settings"
+                android:textColor="#000000"
+                android:textSize="32dp"
+                android:textStyle="bold" />
 
             <!-- Layout for the profile photo -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
                 android:layout_margin="16dp"
-                >
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/profilePhotoLabel"
                     android:layout_width="wrap_content"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="Profile Photo:"
-                    android:textSize="25dp"
                     android:textColor="#000000"
-                    />
+                    android:textSize="25dp" />
 
                 <!-- Button for changing the profile photo -->
                 <Button
                     android:id="@+id/myButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Change" />
+                    android:text="Edit"
+                    android:background="@drawable/button_theme"/>
 
             </LinearLayout>
 
@@ -125,29 +122,27 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_gravity="center_vertical"
-                android:layout_margin="16dp">
+                android:layout_margin="16dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/metriclabel"
                     android:layout_width="wrap_content"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="Metric:"
-                    android:textSize="25dp"
                     android:textColor="#000000"
-                    />
+                    android:textSize="25dp" />
 
                 <!-- KM or Miles  -->
                 <Spinner
                     android:id="@+id/spinnerMetric"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
                     android:background="@drawable/spinner_border"
-                    />
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp" />
 
             </LinearLayout>
 
@@ -155,28 +150,26 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_gravity="center_vertical"
-                android:layout_margin="16dp">
+                android:layout_margin="16dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/distanceLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Max Distance Travel:"
-                    android:textSize="25dp"
                     android:layout_weight="1"
+                    android:text="Max Distance Travel:"
                     android:textColor="#000000"
-                    />
+                    android:textSize="25dp" />
 
                 <Spinner
                     android:id="@+id/spinnerDistance"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
                     android:background="@drawable/spinner_border"
-                    />
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp" />
 
             </LinearLayout>
 
@@ -184,78 +177,76 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
                 android:layout_gravity="center_vertical"
-                android:layout_margin="16dp">
+                android:layout_margin="16dp"
+                android:orientation="vertical">
 
                 <EditText
                     android:id="@+id/editUsername"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Username"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:background="@drawable/text_border"
+                    android:hint="Username"
                     android:inputType="text"
                     android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
                     android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"/>
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="10dp" />
 
                 <EditText
                     android:id="@+id/editEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Email Address"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:background="@drawable/text_border"
+                    android:hint="Email Address"
                     android:inputType="text"
                     android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
                     android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"/>
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="10dp" />
 
                 <EditText
                     android:id="@+id/editPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Password"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:background="@drawable/text_border"
+                    android:hint="Password"
                     android:inputType="text"
                     android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
                     android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"/>
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="10dp" />
 
                 <EditText
                     android:id="@+id/editPasswordConfirmtion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Password Confirmation"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:background="@drawable/text_border"
+                    android:hint="Password Confirmation"
                     android:inputType="text"
                     android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
                     android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"/>
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="10dp" />
 
                 <!-- Button for changing the profile photo -->
                 <Button
                     android:id="@+id/btnSaveAccount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Save" />
-
-
+                    android:text="Save"
+                    android:background="@drawable/button_theme"/>
 
 
             </LinearLayout>
-
 
 
         </LinearLayout>
@@ -264,5 +255,4 @@
     </LinearLayout>
 
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

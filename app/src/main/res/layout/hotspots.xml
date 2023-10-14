@@ -3,4 +3,80 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#A0BFE2"
+        android:orientation="vertical">
+
+        <!-- Heading Layer -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="16dp"
+            android:gravity="center_vertical">
+
+            <!-- TextView -->
+            <TextView
+                android:id="@+id/text_logo"
+                android:layout_width="0dp"
+                android:layout_weight="1"                        android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:textColor="@color/white"
+                android:textSize="30dp"
+                android:textStyle="bold"/>
+
+            <!-- ImageView Home Screen -->
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:contentDescription="Image representing something"
+                android:src="@drawable/home_screen"
+                android:scaleType="centerCrop"
+                android:id="@+id/homeBtn"
+                />
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:contentDescription="Image representing something"
+                android:src="@drawable/jeff_bezos"
+                android:scaleType="centerCrop"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                />
+
+
+        </LinearLayout>
+
+        <!-- Content Layer -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="16dp"
+            android:gravity="center_vertical">
+
+            <!-- TextView -->
+            <TextView
+                android:id="@+id/text_logo_observations"
+                android:layout_width="match_parent"
+                android:layout_weight="1"                        android:layout_height="wrap_content"
+                android:text="Hotspots"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:textColor="@color/white"
+                android:textSize="25dp"
+                android:textStyle="bold"/>
+
+
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

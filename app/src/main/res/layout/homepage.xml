@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="#A0BFE2">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -19,51 +18,52 @@
             <!--  -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/myCardView"
-                orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:clickable="true"
-                android:contentDescription="Image representing something"
                 android:focusable="true"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp"
-                tools:ignore="ExtraText">
+                orientation="horizontal"
+                android:contentDescription="Image representing something"
+                tools:ignore="ExtraText"
+                >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
 
                     <!-- TextView -->
                     <TextView
                         android:id="@+id/text_logo"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_weight="1"                        android:layout_height="wrap_content"
+                        android:text="@string/app_name"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:layout_weight="1"
-                        android:text="@string/app_name"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
 
                     <!-- ImageView -->
                     <ImageView
-                        android:id="@+id/settingsIcon"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:contentDescription="Settings Cog"
+                        android:contentDescription="Image representing something"
+                        android:src="@drawable/settingstwo_icon"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/settingstwo_icon" />
+                        />
 
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
+                        android:contentDescription="Image representing something"
+                        android:src="@drawable/jeff_bezos"
+                        android:scaleType="centerCrop"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:contentDescription="Image representing something"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/jeff_bezos" />
+                        />
 
                 </LinearLayout>
 
@@ -83,27 +83,30 @@
                 android:id="@+id/myLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
                 android:text="Recent bird observations"
-                android:textColor="#000000"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textColor="#000000"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:textStyle="bold"
+                />
 
             <!-- Details of the bird observations -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
                 android:layout_margin="16dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                >
 
                 <!-- cards for the bird observation -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="105dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="30dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    >
 
                 </androidx.cardview.widget.CardView>
 
@@ -111,7 +114,8 @@
                     android:layout_width="105dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="30dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    >
 
                 </androidx.cardview.widget.CardView>
 
@@ -139,28 +143,29 @@
                 android:id="@+id/menuLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
                 android:text="Menu"
-                android:textColor="#000000"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textColor="#000000"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:textStyle="bold"
+                />
 
             <!-- Menu options -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"> 
 
                 <!-- Observations -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_margin="16dp"
-                    android:onClick="handleObservationPageClick"
-                    app:cardCornerRadius="8dp">
-                    >
+                    app:cardCornerRadius="8dp"
+                    android:onClick="handleObservationPageClick">
+                >
 
                     <!-- Observation info -->
                     <LinearLayout
@@ -173,16 +178,18 @@
                         <LinearLayout
                             android:layout_width="100dp"
                             android:layout_height="match_parent"
-                            android:gravity="center_vertical">
+                            android:gravity="center_vertical"
+                            >
 
                             <ImageView
                                 android:layout_width="60dp"
                                 android:layout_height="60dp"
+                                android:contentDescription="Image representing something"
+                                android:src="@drawable/binoculars_icon"
+                                android:scaleType="centerCrop"
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp"
-                                android:contentDescription="Image representing something"
-                                android:scaleType="centerCrop"
-                                android:src="@drawable/binoculars_icon" />
+                                />
 
                         </LinearLayout>
 
@@ -190,8 +197,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:gravity="center_vertical"
                             android:orientation="vertical"
+                            android:gravity="center_vertical"
 
                             >
 
@@ -227,30 +234,33 @@
                     android:layout_height="80dp"
                     android:layout_margin="16dp"
                     app:cardCornerRadius="8dp"
-
+                    android:onClick="handleHotspotPageClick">
                     >
 
                     <!-- Birding Hotspot info -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        >
 
 
                         <!-- Birding Hotspot Image -->
                         <LinearLayout
                             android:layout_width="100dp"
                             android:layout_height="match_parent"
-                            android:gravity="center_vertical">
+                            android:gravity="center_vertical"
+                            >
 
                             <ImageView
                                 android:layout_width="60dp"
                                 android:layout_height="60dp"
+                                android:contentDescription="Image representing something"
+                                android:src="@drawable/popular_icon"
+                                android:scaleType="centerCrop"
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp"
-                                android:contentDescription="Image representing something"
-                                android:scaleType="centerCrop"
-                                android:src="@drawable/popular_icon" />
+                                />
 
                         </LinearLayout>
 
@@ -258,8 +268,9 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:orientation="vertical"
                             android:gravity="center_vertical"
-                            android:orientation="vertical">
+                            >
 
                             <TextView
                                 android:id="@+id/hotspotHeading"
@@ -267,7 +278,8 @@
                                 android:layout_height="wrap_content"
                                 android:text="Birding Hotspot"
                                 android:textSize="20dp"
-                                android:textStyle="bold">
+                                android:textStyle="bold"
+                                >
 
                             </TextView>
 
@@ -292,7 +304,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_margin="16dp"
-                    app:cardCornerRadius="8dp">
+                    app:cardCornerRadius="8dp"
+                    android:onClick="handleSettingsPageClick">
 
                     <!-- Settings info -->
                     <LinearLayout
@@ -300,21 +313,22 @@
                         android:layout_height="match_parent"
                         android:orientation="horizontal">
 
-
                         <!-- Settings Image -->
                         <LinearLayout
                             android:layout_width="100dp"
                             android:layout_height="match_parent"
-                            android:gravity="center_vertical">
+                            android:gravity="center_vertical"
+                            >
 
                             <ImageView
                                 android:layout_width="60dp"
                                 android:layout_height="60dp"
+                                android:contentDescription="Image representing something"
+                                android:src="@drawable/settingstwo_icon"
+                                android:scaleType="centerCrop"
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp"
-                                android:contentDescription="Image representing something"
-                                android:scaleType="centerCrop"
-                                android:src="@drawable/settingstwo_icon" />
+                                />
 
                         </LinearLayout>
 
@@ -322,14 +336,15 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:orientation="vertical"
                             android:gravity="center_vertical"
-                            android:orientation="vertical">
+                            >
 
                             <TextView
                                 android:id="@+id/settingsHeading"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Birding Hotspot"
+                                android:text="Settings"
                                 android:textSize="20dp"
                                 android:textStyle="bold">
 
@@ -357,4 +372,4 @@
 
     </LinearLayout>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

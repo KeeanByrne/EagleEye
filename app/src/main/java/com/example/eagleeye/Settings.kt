@@ -1,16 +1,38 @@
 package com.example.eagleeye
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 
 
 class Settings : AppCompatActivity() {
+
+    private lateinit var btnHomeScreen: ImageView
+
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings) // Connecting to the settings.xml
         populateUnitSpinner(); // Populating the spinner
+
+        /* Returning to the home screen */
+        /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
+        btnHomeScreen = findViewById<ImageView>(R.id.homeBtn);
+
+        btnHomeScreen.setOnClickListener {
+            // Add your code here to handle the click event
+            // For example, you can open a new activity or perform some action.
+
+            // Taking the user to the homepage.
+            val intent = Intent(this@Settings, Home::class.java)
+            startActivity(intent);
+
+        };
+        /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
     }
 

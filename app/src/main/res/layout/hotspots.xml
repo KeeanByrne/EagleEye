@@ -72,7 +72,7 @@
                 android:textSize="25dp"
                 android:textStyle="bold"/>
 
-
+            <!-- Add Google Map -->
 
 
         </LinearLayout>

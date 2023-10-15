@@ -22,6 +22,7 @@ class eBirdAPIHelper {
             .build()
 
         val response: Response = client.newCall(request).execute()
+
         if (response.isSuccessful) {
             println("Connection to eBird API successful")
         } else {
@@ -72,7 +73,7 @@ class eBirdAPIHelper {
 
                         // Create a HotspotData object and add it to the list
                         hotspotDataList.add(
-                            HotspotData(id, country, region, latitude, longitude, name )
+                            HotspotData(id, country, region, latitude, longitude, name)
                         )
                     }
                 }

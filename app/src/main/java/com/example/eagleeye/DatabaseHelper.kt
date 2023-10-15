@@ -70,6 +70,16 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 "FOREIGN KEY(SpeciesID) REFERENCES " + Species_Table + "(Id) " + // Define the foreign key constraint
                 ")")
 
+        // Table to store sightings.
+        val sighting_create_query = ("CREATE TABLE " + Sighting_Table + " (" +
+                "Id" + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "BirdName" + " VARCHAR, " +
+                "LatinName" + " VARCHAR, " +
+                "Location" + " VARCHAR " +
+                ")"
+                )
+
+
 
         // Table to store the species observed.
 
@@ -80,6 +90,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.execSQL(hotspot_create_query) // Creating the Hotspot Table.
         db.execSQL(species_create_query) // Creating the Species Table.
         db.execSQL(record_create_query) // Creating the record Table.
+        db.execSQL(sighting_create_query) // Creating the sighting Table.
 
 
 
@@ -93,6 +104,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.execSQL("DROP TABLE IF EXISTS " + User_Table)
         db.execSQL("DROP TABLE IF EXISTS " + Hotspot_Table)
         db.execSQL("DROP TABLE IF EXISTS " + Species_Table)
+        db.execSQL("DROP TABLE IF EXISTS " + Sighting_Table)
 
         onCreate(db)
     }
@@ -191,6 +203,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val Hotspot_Table = "Hotspot"
         val Species_Table = "Species"
         val Record_Table = "Record"
+        val Sighting_Table = "Sighting"
 
 
     }

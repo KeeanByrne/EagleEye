@@ -32,6 +32,7 @@ class Hotspot : AppCompatActivity() {
             var hotspotResults = eBirdHelper.getNearbyHotspot("-33.8084826", "18.4763215")
 
             hotspotResults.forEach { hotspotData ->
+
                 println("ID: ${hotspotData.id}")
                 println("Country: ${hotspotData.country}")
                 println("Region: ${hotspotData.region}")

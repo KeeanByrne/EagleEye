@@ -58,4 +58,6 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation("androidx.cardview:cardview:1.0.0") // Use the latest version
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
+    implementation("com.google.android.gms:play-services-maps:18.1.0")
+
 }

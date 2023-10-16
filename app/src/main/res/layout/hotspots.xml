@@ -56,7 +56,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_margin="16dp"
             android:gravity="center_vertical">
 
@@ -73,6 +73,14 @@
                 android:textStyle="bold"/>
 
             <!-- Add Google Map -->
+            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="570dp"
+                android:id="@+id/mapView"
+                tools:context=".MapsActivity"
+                android:name="com.google.android.gms.maps.SupportMapFragment" />
+
 
 
         </LinearLayout>

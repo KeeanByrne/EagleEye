@@ -1,19 +1,25 @@
 package com.example.eagleeye
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.tasks.OnSuccessListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -22,16 +28,27 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var btnHomeScreen: ImageView
     private var myMap: GoogleMap? = null // Change to var to allow assignment
+    private val REQUEST_CODE = 1
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var latitude: Double = 0.0
+    private var longitude: Double = 0.0
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.hotspots)
 
+        /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE)
+        }
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.mapView) as SupportMapFragment?
         mapFragment!!.getMapAsync(this)
+        /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
         // Going back to the homescreen.
         btnHomeScreen = findViewById(R.id.homeBtn)
@@ -40,23 +57,46 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback {
             val intent = Intent(this@Hotspot, Home::class.java)
             startActivity(intent)
         }
+
+        /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
     }
 
+    @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
         myMap = googleMap // Assign the googleMap object to myMap
 
         // Add a marker in Sydney and move the camera
-        val my_mark = LatLng(-33.8084826, 18.4763215)
 
-        myMap?.addMarker(
-            MarkerOptions()
-                .position(my_mark)
-                .title("My Marker")
-        )
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        val zoomLevel = 12.0f // Adjust the zoom level as needed
-        myMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(my_mark, zoomLevel))
+        fusedLocationClient.getLastLocation()
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener(this@Hotspot, OnSuccessListener { location ->
+                if (location != null) {
 
+                    latitude = location.latitude
+                    longitude = location.longitude
+
+                    val my_mark = LatLng(latitude, longitude)
+
+                    myMap?.addMarker(
+                        MarkerOptions()
+                            .position(my_mark)
+                            .title("My Location")
+                    )
+
+                    val zoomLevel = 12.0f // Adjust the zoom level as needed
+                    myMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(my_mark, zoomLevel))
+
+
+                    // Use latitude and longitude as needed.
+                    /*
+                    println("Latitude: ${latitude}")
+                    println("Longitude: ${longitude}") */
+
+                }
+            })
 
         // Launch a coroutine for loading the map
         CoroutineScope(Dispatchers.IO).launch {
@@ -65,7 +105,9 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback {
 
         // Launch a separate coroutine for populating hotspots
         CoroutineScope(Dispatchers.IO).launch {
-            val result = populateHotspots()
+
+            // Providing the nearby hotspots based on the user's latitude and longitude
+            val result = populateHotspots(latitude, longitude)
             val markerOptionsList = mutableListOf<MarkerOptions>()
             withContext(Dispatchers.Main) {
 
@@ -74,13 +116,6 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback {
                     val markerLoop = MarkerOptions().position(LatLng(hotspotData.latitude, hotspotData.longitude)).title("${hotspotData.name}")
                     markerOptionsList.add(markerLoop)
 
-                    /*
-                    println("--------------------------------")
-                    println("${hotspotData.name}")
-                    println("${hotspotData.latitude}")
-                    println("${hotspotData.longitude}")
-                    println("--------------------------------")
-                    */
                 }
 
                 for (markerOptions in markerOptionsList) {
@@ -92,11 +127,11 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
-    suspend fun populateHotspots(): List<eBirdAPIHelper.HotspotData>{
+    suspend fun populateHotspots(latitude: Double, longitude: Double): List<eBirdAPIHelper.HotspotData>{
         return withContext(Dispatchers.IO) {
             try {
                 val eBirdAPIHelper = eBirdAPIHelper()
-                val hotSpotList = eBirdAPIHelper.getNearbyHotspot("-33.8084826", "18.4763215")
+                val hotSpotList = eBirdAPIHelper.getNearbyHotspot(latitude.toString(), longitude.toString())
                 hotSpotList
             } catch (e: Exception) {
                 e.printStackTrace()

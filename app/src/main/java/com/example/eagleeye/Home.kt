@@ -36,6 +36,19 @@ class Home: AppCompatActivity() {
         // Toast.makeText(this, "This button works!", Toast.LENGTH_SHORT).show()
     }
 
+    fun handleSightingPageClick(view: View) {
+
+
+        // Taking the user to the Record Sightings Page
+        try {
+            val intent = Intent(this@Home, Sighting::class.java)
+            startActivity(intent)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
+
     // Going to the settings page
     fun handleSettingsPageClick(view: View) {
         // Taking the user to the homepage

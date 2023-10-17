@@ -8,6 +8,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.icu.text.AlphabeticIndex.Record
+import android.util.Log
 
 // Database Helper is the file that will be used for making database
 // queries and creating the appropriate database tables.
@@ -75,7 +76,8 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 "Id" + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "BirdName" + " VARCHAR, " +
                 "LatinName" + " VARCHAR, " +
-                "Location" + " VARCHAR " +
+                "Location" + " VARCHAR, " +
+                "BirdPhotoBlob" + " BLOB" +  // Correct the data type to BLOB for storing binary data
                 ")"
                 )
 
@@ -207,4 +209,54 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
 
     }
+
+
+    //-------Method to add a new bird sighting to the database-------//
+    fun addSighting(birdName: String, latinName: String, location: String /*birdPhoto: ByteArray?*/) {
+        val db = this.writableDatabase
+        val values = ContentValues()
+
+        values.put("BirdName", birdName)
+        values.put("LatinName", latinName)
+        values.put("Location", location)
+        /*values.put("BirdPhoto", birdPhoto)*/
+
+        db.insert(Sighting_Table, null, values)
+
+        db.close()
+    }
+
+    fun addSightingWithImage(birdName: String, latinName: String, location: String, birdPhoto: ByteArray?) {
+        val db = this.writableDatabase
+
+        db.beginTransaction()
+
+        try {
+            val values = ContentValues()
+            values.put("BirdName", birdName)
+            values.put("LatinName", latinName)
+            values.put("Location", location)
+            values.put("BirdPhotoBlob", birdPhoto)
+
+            // Insert the data into the database
+            val result = db.insert(Sighting_Table, null, values)
+
+            //--------------------------Debugging code--------------------------//
+            if (result != -1L) {
+                Log.d("AddSightingWithImage", "Image saved successfully")
+            } else {
+                Log.e("AddSightingWithImage", "Image not saved to the database")
+            }
+            //--------------------------Debugging code--------------------------//
+
+
+            // Set the transaction as successful
+            db.setTransactionSuccessful()
+        } finally {
+            // End the transaction
+            db.endTransaction()
+            db.close()
+        }
+    }
+
 }

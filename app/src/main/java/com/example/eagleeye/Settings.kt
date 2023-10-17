@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 class Settings : AppCompatActivity() {
 
-    private lateinit var btnHomeScreen: ImageView
+    /*private lateinit var btnHomeScreen: ImageView*/
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,7 +21,7 @@ class Settings : AppCompatActivity() {
 
         /* Returning to the home screen */
         /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
-        btnHomeScreen = findViewById<ImageView>(R.id.homeBtn);
+        /*btnHomeScreen = findViewById(R.id.homeBtn);
 
         btnHomeScreen.setOnClickListener {
             // Add your code here to handle the click event
@@ -31,7 +31,7 @@ class Settings : AppCompatActivity() {
             val intent = Intent(this@Settings, Home::class.java)
             startActivity(intent);
 
-        };
+        };*/
         /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
     }

@@ -55,7 +55,7 @@
                         android:layout_height="60dp"
                         android:contentDescription="Image representing something"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/settingstwo_icon" />
+                        android:src="@drawable/settings_cog" />
 
                     <ImageView
                         android:layout_width="60dp"

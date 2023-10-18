@@ -68,76 +68,55 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback {
 
         // Add a marker in Sydney and move the camera
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        // Initialize the location client
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        fusedLocationClient.getLastLocation()
+        // Get the last known location
         fusedLocationClient.lastLocation
-            .addOnSuccessListener(this@Hotspot, OnSuccessListener { location ->
+            .addOnSuccessListener(this@Hotspot) { location ->
                 if (location != null) {
+                    val my_mark = LatLng(location.latitude, location.longitude)
 
-                    latitude = location.latitude
-                    longitude = location.longitude
-
-                    val my_mark = LatLng(latitude, longitude)
-
-                    myMap?.addMarker(
-                        MarkerOptions()
-                            .position(my_mark)
-                            .title("My Location")
-                    )
+                    // Add a marker for the user's location
+                    myMap?.addMarker(MarkerOptions().position(my_mark).title("My Location"))
 
                     val zoomLevel = 12.0f // Adjust the zoom level as needed
                     myMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(my_mark, zoomLevel))
 
-
-                    // Use latitude and longitude as needed.
-                    /*
-                    println("Latitude: ${latitude}")
-                    println("Longitude: ${longitude}") */
-
+                    // Launch a coroutine to populate hotspots
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val hotspotList = populateHotspots(location.latitude, location.longitude)
+                        displayHotspots(hotspotList)
+                    }
                 }
-            })
-
-        // Launch a coroutine for loading the map
-        CoroutineScope(Dispatchers.IO).launch {
-            // Map loading logic
-        }
-
-        // Launch a separate coroutine for populating hotspots
-        CoroutineScope(Dispatchers.IO).launch {
-
-            // Providing the nearby hotspots based on the user's latitude and longitude
-            val result = populateHotspots(latitude, longitude)
-            val markerOptionsList = mutableListOf<MarkerOptions>()
-            withContext(Dispatchers.Main) {
-
-                result.forEach {  hotspotData ->
-
-                    val markerLoop = MarkerOptions().position(LatLng(hotspotData.latitude, hotspotData.longitude)).title("${hotspotData.name}")
-                    markerOptionsList.add(markerLoop)
-
-                }
-
-                for (markerOptions in markerOptionsList) {
-                    myMap?.addMarker(markerOptions)
-                }
-
             }
-        }
-
     }
 
-    suspend fun populateHotspots(latitude: Double, longitude: Double): List<eBirdAPIHelper.HotspotData>{
-        return withContext(Dispatchers.IO) {
-            try {
-                val eBirdAPIHelper = eBirdAPIHelper()
-                val hotSpotList = eBirdAPIHelper.getNearbyHotspot(latitude.toString(), longitude.toString())
-                hotSpotList
-            } catch (e: Exception) {
-                e.printStackTrace()
-                // Handle exceptions as needed
-                // Return an appropriate result or throw an exception if necessary
-                emptyList() // Return an empty list as a default value
+
+    // -33.9248683, 18.424055
+    private suspend fun populateHotspots(latitude: Double, longitude: Double): List<eBirdAPIHelper.HotspotData> {
+        return try {
+            val eBirdAPIHelper = eBirdAPIHelper()
+            val hotSpotList = eBirdAPIHelper.getNearbyHotspot(latitude.toString(), longitude.toString())
+            hotSpotList
+        } catch (e: Exception) {
+            e.printStackTrace()
+            // Handle exceptions as needed
+            // Return an appropriate result or throw an exception if necessary
+            emptyList() // Return an empty list as a default value
+        }
+    }
+
+    private suspend fun displayHotspots(hotspotList: List<eBirdAPIHelper.HotspotData>) {
+        val markerOptionsList = hotspotList.map { hotspotData ->
+            MarkerOptions()
+                .position(LatLng(hotspotData.latitude, hotspotData.longitude))
+                .title(hotspotData.name)
+        }
+
+        withContext(Dispatchers.Main) {
+            markerOptionsList.forEach { markerOptions ->
+                myMap?.addMarker(markerOptions)
             }
         }
     }

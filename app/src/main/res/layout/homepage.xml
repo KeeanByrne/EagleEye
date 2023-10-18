@@ -106,6 +106,7 @@
                     android:layout_width="105dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="30dp"
+                    app:cardCornerRadius="25dp"
                     android:orientation="vertical"
                     >
 
@@ -115,6 +116,7 @@
                     android:layout_width="105dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="30dp"
+                    app:cardCornerRadius="25dp"
                     android:orientation="vertical"
                     >
 
@@ -123,6 +125,7 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="105dp"
                     android:layout_height="match_parent"
+                    app:cardCornerRadius="25dp"
                     android:orientation="vertical">
 
                 </androidx.cardview.widget.CardView>
@@ -164,7 +167,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_margin="16dp"
-                    app:cardCornerRadius="8dp"
+                    app:cardCornerRadius="25dp"
                     android:onClick="handleObservationPageClick">
                 >
 
@@ -235,7 +238,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_margin="16dp"
-                    app:cardCornerRadius="8dp"
+                    app:cardCornerRadius="25dp"
                     android:onClick="handleSightingPageClick">
                     >
 
@@ -305,7 +308,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_margin="16dp"
-                    app:cardCornerRadius="8dp"
+                    app:cardCornerRadius="25dp"
                     android:onClick="handleHotspotPageClick">
                     >
 
@@ -376,7 +379,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_margin="16dp"
-                    app:cardCornerRadius="8dp"
+                    app:cardCornerRadius="25dp"
                     android:onClick="handleSettingsPageClick">
 
                     <!-- Settings info -->

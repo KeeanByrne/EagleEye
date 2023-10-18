@@ -26,27 +26,96 @@ class Signup : AppCompatActivity() {
         // Creating an object for the database process.
         val db = DBHelper(this, null)
 
-        btn_signup = findViewById(R.id.btnSaveAccount);
+        btn_signup = findViewById(R.id.btnSaveAccount)
         btn_signup.setOnClickListener{
+
+            // Perform validations
+            val validation = Validation()
+            val invalidFields = mutableListOf<String>()
+
+            //---------------------Input and Validation for First Name----------------------------//
+
             var txtFirstName = findViewById<EditText>(R.id.editFirstName);
-            var firstName = txtFirstName.text.toString() // Storing the firstName;
+            var firstName = txtFirstName.text.toString() // Storing the FirstName;
+
+            //validating firstname
+            if (!validation.validateStringsWithoutNumbers(firstName)) {
+                invalidFields.add("Firstname")
+                txtFirstName.error = "Only letters allowed!"
+            }
+
+            //------------------------------------------------------------------------------------//
+
+
+
+            //---------------------Input and Validation for Surname-------------------------------//
 
             var txtSurname = findViewById<EditText>(R.id.editSurname);
-            var surname = txtSurname.text.toString() // Storing the firstName;
+            var surname = txtSurname.text.toString() // Storing the Surname;
+
+            if (!validation.validateStringsWithoutNumbers(surname)) {
+                invalidFields.add("Surname")
+                txtSurname.error = "Only letters allowed!"
+            }
+
+            //------------------------------------------------------------------------------------//
+
+
+
+            //---------------------Input and Validation for Userame-------------------------------//
 
             var txtUsername = findViewById<EditText>(R.id.editUsername);
             var username = txtUsername.text.toString(); // Storing the username
 
+            if (!validation.validateStringsWithNumbers(username) || username.length < 5) {
+                invalidFields.add("Username")
+                txtUsername.error = "Only letters and numbers are allowed allowed and it needs to be longer than 5 characters"
+            }
+
+
+            //------------------------------------------------------------------------------------//
+
+
+
+            //---------------------Input and Validation for Email Address-------------------------//
             var txtEmailAddress = findViewById<EditText>(R.id.editEmailAddress);
             var email = txtEmailAddress.text.toString(); // Storing the email
 
+            if (!validation.validEmail(email)) {
+                invalidFields.add("Email Address")
+                txtEmailAddress.error = "Must be a valid email address"
+            }
+
+
+            //------------------------------------------------------------------------------------//
+
+
+            //---------------------Input and Validation for Password------------------------------//
             var txtPassword = findViewById<EditText>(R.id.editPassword);
             var password = txtPassword.text.toString(); // Storing the password
 
+            if (password.length < 7) {
+                invalidFields.add("Password")
+                txtPassword.error = "Password must be longer than 7 characters"
+            }
+
+            //------------------------------------------------------------------------------------//
+
+
+
+            //---------------------Input and Validation for Confirm Password ---------------------//
             var txtPasswordConfirmation = findViewById<EditText>(R.id.editPasswordConfirmation);
             var passwordConfiramtion = txtPasswordConfirmation.text.toString(); // Storing the password.
 
-            if(password == passwordConfiramtion) {
+            if (password != passwordConfiramtion) {
+                invalidFields.add("confirmPassword")
+                txtPasswordConfirmation.error = "Both passwords need to match"
+            }
+
+            //------------------------------------------------------------------------------------//
+
+
+            /*if(password == passwordConfiramtion) {
 
                 // Passing the information into the method which will be stored in the database.
                 db.registerUser(firstName, surname, username, email, password);
@@ -58,11 +127,31 @@ class Signup : AppCompatActivity() {
                 txtPassword.setText("");
                 txtPasswordConfirmation.setText("");
 
-                val intent = Intent(this@Signup, Login::class.java)
-                startActivity(intent)
+                *//*val intent = Intent(this@Signup, Login::class.java)
+                startActivity(intent)*//*
 
             } else {
                 Toast.makeText(this, "Password must match with password confirmation", Toast.LENGTH_SHORT).show()
+            }*/
+
+            //checking for errors and displaying toast message if any are found
+            if (invalidFields.isNotEmpty()) {
+                val errorMessage = "Invalid input/s. Please check the following field(s): ${
+                    invalidFields.joinToString(", ")
+                }"
+                Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+                return@setOnClickListener // Stop execution if any field is invalid
+            } else{
+                db.registerUser(firstName, surname, username, email, password);
+
+                // Clearing the text after signing up.
+                txtFirstName.setText("");
+                txtSurname.setText("");
+                txtEmailAddress.setText("");
+                txtPassword.setText("");
+                txtPasswordConfirmation.setText("");
+                val intent = Intent(this@Signup, Login::class.java)
+                startActivity(intent)
             }
 
         }

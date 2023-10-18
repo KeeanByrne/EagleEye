@@ -55,8 +55,7 @@ class Login : AppCompatActivity() {
 
         // Checking if the user exists.
         if(userExists) {
-            Toast.makeText(this, "User exists!", Toast.LENGTH_SHORT).show()
-
+            /*Toast.makeText(this, "User exists!", Toast.LENGTH_SHORT).show()*/
             // Creating the session for the user by storing the ID.
             startSession(usernameCheck);
 
@@ -65,7 +64,7 @@ class Login : AppCompatActivity() {
             startActivity(intent)
 
         } else {
-            Toast.makeText(this, "User does not exist!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Your Username And/Or Password Is Incorrect!", Toast.LENGTH_SHORT).show()
         }
 
 

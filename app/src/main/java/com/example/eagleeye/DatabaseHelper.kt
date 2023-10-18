@@ -9,6 +9,9 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.icu.text.AlphabeticIndex.Record
 import android.util.Log
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 // Database Helper is the file that will be used for making database
 // queries and creating the appropriate database tables.
@@ -77,7 +80,8 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 "BirdName" + " VARCHAR, " +
                 "LatinName" + " VARCHAR, " +
                 "Location" + " VARCHAR, " +
-                "BirdPhotoBlob" + " BLOB" +  // Correct the data type to BLOB for storing binary data
+                "BirdPhotoBlob" + " BLOB, " +
+                "Timestamp" + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
                 ")"
                 )
 
@@ -212,17 +216,19 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
 
     //-------Method to add a new bird sighting to the database-------//
-    fun addSighting(birdName: String, latinName: String, location: String /*birdPhoto: ByteArray?*/) {
+    fun addSighting(birdName: String, latinName: String, location: String) {
         val db = this.writableDatabase
         val values = ContentValues()
 
         values.put("BirdName", birdName)
         values.put("LatinName", latinName)
         values.put("Location", location)
-        /*values.put("BirdPhoto", birdPhoto)*/
+
+        //Method for getting the current timestamp as a string
+        val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+        values.put("Timestamp", timestamp)
 
         db.insert(Sighting_Table, null, values)
-
         db.close()
     }
 
@@ -238,7 +244,10 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
             values.put("Location", location)
             values.put("BirdPhotoBlob", birdPhoto)
 
-            // Insert the data into the database
+            val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+            values.put("Timestamp", timestamp)
+
+            //Inserting the data into the database
             val result = db.insert(Sighting_Table, null, values)
 
             //--------------------------Debugging code--------------------------//
@@ -250,10 +259,10 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
             //--------------------------Debugging code--------------------------//
 
 
-            // Set the transaction as successful
+            //Setting the transaction as successful
             db.setTransactionSuccessful()
         } finally {
-            // End the transaction
+            //Ending the transaction
             db.endTransaction()
             db.close()
         }

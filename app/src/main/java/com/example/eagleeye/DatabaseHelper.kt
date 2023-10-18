@@ -86,7 +86,6 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 )
 
 
-
         // Table to store the species observed.
 
         // we are calling sqlite

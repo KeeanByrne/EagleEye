@@ -2,10 +2,12 @@ package com.example.eagleeye
 
 import android.content.Context
 import android.database.Cursor
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CursorAdapter
+import android.widget.ImageView
 import android.widget.TextView
 
     class SightingCursorAdapter(context: Context, cursor: Cursor?, flags: Int) : CursorAdapter(context, cursor, flags) {
@@ -20,10 +22,28 @@ import android.widget.TextView
             val birdNameTextView = view.findViewById<TextView>(R.id.textBirdName)
             val latinNameTextView = view.findViewById<TextView>(R.id.textLatinName)
             val locationTextView = view.findViewById<TextView>(R.id.textLocation)
+            val birdPhotoImageView = view.findViewById<ImageView>(R.id.imageBirdPhoto)
+
 
             val birdNameIndex = cursor.getColumnIndex("BirdName")
             val latinNameIndex = cursor.getColumnIndex("LatinName")
             val locationIndex = cursor.getColumnIndex("Location")
+            val birdPhotoIndex = cursor.getColumnIndex("BirdPhotoBlob")
+            val birdPhotoData: ByteArray?
+
+            if (birdPhotoIndex != -1) {
+                birdPhotoData = cursor.getBlob(birdPhotoIndex)
+            } else {
+                birdPhotoData = null // Handle the case where "BirdPhotoBlob" doesn't exist
+            }
+
+            if (birdPhotoData != null) {
+                val birdPhotoBitmap = BitmapFactory.decodeByteArray(birdPhotoData, 0, birdPhotoData.size)
+                birdPhotoImageView.setImageBitmap(birdPhotoBitmap)
+            } else {
+                // Set a default image if no photo is available
+                birdPhotoImageView.setImageResource(R.drawable.eagle_eye_df)
+            }
 
             if (birdNameIndex != -1) {
                 val birdName = cursor.getString(birdNameIndex)
@@ -45,6 +65,14 @@ import android.widget.TextView
             } else {
                 locationTextView.text = "N/A" // or handle the case where "Location" doesn't exist
             }
+
+            /*if (birdPhotoData != null) {
+                val birdPhotoBitmap = BitmapFactory.decodeByteArray(birdPhotoData, 0, birdPhotoData.size)
+                birdPhotoImageView.setImageBitmap(birdPhotoBitmap)
+            } else {
+                // Set a default image if no photo is available
+                birdPhotoImageView.setImageResource(R.drawable.jeff_bezos)
+            }*/
         }
     }
 

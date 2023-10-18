@@ -54,6 +54,7 @@
                         android:contentDescription="Image representing something"
                         android:src="@drawable/settings_cog"
                         android:scaleType="centerCrop"
+                        android:onClick="handleSettingsPageClick"
                         />
 
                     <ImageView

@@ -175,8 +175,9 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
     //Allowing the user to update their settings
     @SuppressLint("Range")
-    fun updateSettings(userID: Int, )
+    fun updateSettings(userID: String, newSettings: SettingsData)
     {
+        val db = this.writableDatabase
 
     }
 

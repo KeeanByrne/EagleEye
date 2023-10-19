@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
@@ -35,8 +36,16 @@ class Settings : AppCompatActivity() {
         };*/
         /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
         val btnSaveAccount = findViewById<Button>(R.id.btnSaveAccount);
+        val db = DBHelper(this, null);
         btnSaveAccount.setOnClickListener {
-
+            val NewSettings = SettingsData();
+            NewSettings.ProfilePic = "New Pic";
+            NewSettings.Metric = findViewById<Spinner>(R.id.spinnerMetric).selectedItem.toString();
+            NewSettings.MaxDistance = findViewById<Spinner>(R.id.spinnerDistance).selectedItem.toString().toInt();
+            NewSettings.Username = findViewById<EditText>(R.id.editUsername).text.toString();
+            NewSettings.UserID = db.returnID(findViewById<EditText>(R.id.editUsername).text.toString());
+            NewSettings.Password = findViewById<EditText>(R.id.editPassword).text.toString();
+            db.updateSettings(db.returnID(findViewById<EditText>(R.id.editUsername).text.toString()), NewSettings)
         }
     }
 

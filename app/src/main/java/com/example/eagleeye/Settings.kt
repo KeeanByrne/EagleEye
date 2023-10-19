@@ -18,7 +18,9 @@ class Settings : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings) // Connecting to the settings.xml
-        populateUnitSpinner(); // Populating the spinner
+        populateMetricSpinner()      //Populating the Metric spinner
+        populateDistanceSpinner()   //Populating the Max Distance spinner
+
 
         /* Returning to the home screen */
         /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
@@ -41,7 +43,7 @@ class Settings : AppCompatActivity() {
     }
 
     // Populating the unit spinner with Km and Mi.
-    fun populateUnitSpinner() {
+    fun populateMetricSpinner() {
 
         // List of distance units
         val options = arrayOf("Km", "Mi")
@@ -49,6 +51,18 @@ class Settings : AppCompatActivity() {
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, options)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         val spinner = findViewById<Spinner>(R.id.spinnerMetric)
+        spinner.adapter = adapter
+
+    }
+
+    fun populateDistanceSpinner() {
+
+        // List of distance units
+        val options = arrayOf("50", "100", "150", "200")
+
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, options)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val spinner = findViewById<Spinner>(R.id.spinnerDistance)
         spinner.adapter = adapter
 
     }

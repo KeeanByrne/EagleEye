@@ -4,7 +4,10 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.os.AsyncTask
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
@@ -20,12 +23,16 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.gms.tasks.OnSuccessListener
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.net.URLEncoder
 
 class Hotspot : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
@@ -45,8 +52,16 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         setContentView(R.layout.hotspots)
 
         /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE)
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                REQUEST_CODE
+            )
         }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -78,6 +93,9 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
             myMap?.addMarker(MarkerOptions().position(destination_marker).title("Destination"))
             myMap?.addMarker(MarkerOptions().position(origin_marker).title("Origin"))
 
+            // Showing the route
+            val URL = getDirectionURL(origin_marker, destination_marker)
+            GetDirection(URL).execute()
 
         }
 
@@ -115,6 +133,67 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
                     }
                 }
             }
+    }
+
+    fun getDirectionURL(origin: LatLng, dest: LatLng): String {
+
+        val encodedOrigin = URLEncoder.encode("${origin.latitude},${origin.longitude}", "UTF-8")
+        val encodedDestination = URLEncoder.encode("${dest.latitude},${dest.longitude}", "UTF-8")
+        val encodedAPI = URLEncoder.encode("AIzaSyD16EaDbQvz8oFV7pZfLDGUntO51P5-LpE")
+        val url = "https://maps.googleapis.com/maps/api/directions/json" +
+                "?origin=$encodedOrigin" +
+                "&destination=$encodedDestination" +
+                "&sensor=false" +
+                "&mode=driving" +
+                "&key=$encodedAPI"
+
+        return url
+    }
+
+    private inner class GetDirection(val url : String) : AsyncTask<Void, Void, List<List<LatLng>>>(){
+        override fun doInBackground(vararg params: Void?): List<List<LatLng>> {
+            val client = OkHttpClient()
+            val request = Request.Builder().url(url).build()
+            val response = client.newCall(request).execute()
+            val data = response.body!!.string()
+            Log.d("GoogleMap" , " data : $data")
+
+            println("Testing Directions Route")
+
+            val result =  ArrayList<List<LatLng>>()
+            try{
+                val respObj = Gson().fromJson(data,GoogleMapDTO::class.java)
+
+                val path =  ArrayList<LatLng>()
+
+                for (i in 0..(respObj.routes[0].legs[0].steps.size-1)){
+//                    val startLatLng = LatLng(respObj.routes[0].legs[0].steps[i].start_location.lat.toDouble()
+//                            ,respObj.routes[0].legs[0].steps[i].start_location.lng.toDouble())
+//                    path.add(startLatLng)
+//                    val endLatLng = LatLng(respObj.routes[0].legs[0].steps[i].end_location.lat.toDouble()
+//                            ,respObj.routes[0].legs[0].steps[i].end_location.lng.toDouble())
+                    path.addAll(decodePolyline(respObj.routes[0].legs[0].steps[i].polyline.points))
+                }
+                result.add(path)
+            }catch (e:Exception){
+                e.printStackTrace()
+            }
+            return result
+        }
+
+        override fun onPostExecute(result: List<List<LatLng>>) {
+            val lineoption = PolylineOptions()
+            for (i in result.indices){
+                lineoption.addAll(result[i])
+                lineoption.width(10f)
+                lineoption.color(Color.BLUE)
+                lineoption.geodesic(true)
+            }
+
+            runOnUiThread {
+                myMap?.addPolyline(lineoption)
+            }
+        }
     }
 
     override fun onMarkerClick(p0: Marker): Boolean {
@@ -169,6 +248,44 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
             }
         }
     }
+
+    public fun decodePolyline(encoded: String): List<LatLng> {
+
+        val poly = ArrayList<LatLng>()
+        var index = 0
+        val len = encoded.length
+        var lat = 0
+        var lng = 0
+
+        while (index < len) {
+            var b: Int
+            var shift = 0
+            var result = 0
+            do {
+                b = encoded[index++].toInt() - 63
+                result = result or (b and 0x1f shl shift)
+                shift += 5
+            } while (b >= 0x20)
+            val dlat = if (result and 1 != 0) (result shr 1).inv() else result shr 1
+            lat += dlat
+
+            shift = 0
+            result = 0
+            do {
+                b = encoded[index++].toInt() - 63
+                result = result or (b and 0x1f shl shift)
+                shift += 5
+            } while (b >= 0x20)
+            val dlng = if (result and 1 != 0) (result shr 1).inv() else result shr 1
+            lng += dlng
+
+            val latLng = LatLng((lat.toDouble() / 1E5),(lng.toDouble() / 1E5))
+            poly.add(latLng)
+        }
+
+        return poly
+    }
+
 }
 
 private fun SupportMapFragment.getMapAsync(hotspot: Hotspot) {

@@ -47,10 +47,4 @@ class Observations : AppCompatActivity() {
 
     }
 
-
-
-
-
-
-
 }

@@ -151,8 +151,7 @@ class Signup : AppCompatActivity() {
                 txtPassword.setText("");
                 txtPasswordConfirmation.setText("");
                 val intent = Intent(this@Signup, Login::class.java)
-                startActivity(intent)
-            }
+                startActivity(intent) }
 
         }
 

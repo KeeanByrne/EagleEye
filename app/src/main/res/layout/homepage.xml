@@ -104,6 +104,7 @@
 
                 <!-- cards for the bird observation -->
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/recentSighting1"
                     android:layout_width="105dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="30dp"
@@ -111,9 +112,15 @@
                     android:orientation="vertical"
                     >
 
+                    <ListView
+                        android:id="@+id/listViewObservations1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/recentSighting2"
                     android:layout_width="105dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="30dp"
@@ -121,13 +128,24 @@
                     android:orientation="vertical"
                     >
 
+                    <ListView
+                        android:id="@+id/listViewObservations2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/recentSighting3"
                     android:layout_width="105dp"
                     android:layout_height="match_parent"
                     app:cardCornerRadius="25dp"
                     android:orientation="vertical">
+
+                    <ListView
+                        android:id="@+id/listViewObservations3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
 
                 </androidx.cardview.widget.CardView>
 

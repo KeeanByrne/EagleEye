@@ -90,6 +90,35 @@
 
             </Button>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <Button
+                    android:layout_width="200dp"
+                    android:layout_height="80dp"
+                    android:text="View all hotspots"
+                    android:id="@+id/btnViewHotspots">
+
+                </Button>
+
+                <Button
+                    android:layout_width="200dp"
+                    android:layout_height="80dp"
+                    android:text="My Location"
+                    android:id="@+id/btnCurrentLocation">
+
+                </Button>
+
+
+
+            </LinearLayout>
+
+
+
+
 
 
         </LinearLayout>

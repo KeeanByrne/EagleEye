@@ -20,6 +20,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -38,6 +39,10 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
 
     private lateinit var btnHomeScreen: ImageView
     private lateinit var btnGetDirections: Button
+    private lateinit var btnViewHotspot: Button
+    private lateinit var btnMyLocation: Button
+
+
     private var myMap: GoogleMap? = null // Change to var to allow assignment
     private val REQUEST_CODE = 1
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -80,6 +85,7 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         }
 
         /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+        // Getting the Directions from the origin to destination.
         btnGetDirections = findViewById(R.id.btnGetDirections)
 
         btnGetDirections.setOnClickListener {
@@ -99,6 +105,25 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
 
         }
 
+        /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+        // Viewing all the hotspots
+        btnViewHotspot = findViewById(R.id.btnViewHotspots)
+
+        btnViewHotspot.setOnClickListener {
+            myMap?.clear()
+
+            getUserLocationAndAddMarkers()
+
+        }
+        /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+        btnMyLocation = findViewById(R.id.btnCurrentLocation)
+
+        btnMyLocation.setOnClickListener {
+            myMap?.clear()
+
+            getMyLocationOnly()
+        }
+
     }
 
     @SuppressLint("MissingPermission")
@@ -107,10 +132,78 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         myMap?.setOnMarkerClickListener(this) // Set the marker click listener
         // Add a marker in Sydney and move the camera
 
+        getUserLocationAndAddMarkers()
+
+    }
+
+    // Returning the current location only
+    private fun getMyLocationOnly() {
         // Initialize the location client
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         // Get the last known location
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener(this@Hotspot) { location ->
+                if (location != null) {
+                    val my_mark = LatLng(location.latitude, location.longitude)
+
+                    latitudeOrigin = location.latitude
+                    longitudeOrigin = location.longitude
+
+                    val markerColor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN) // Change to the desired color (e.g., BitmapDescriptorFactory.HUE_GREEN)
+                    val markerOptions = MarkerOptions()
+                        .position(my_mark) // Replace with your marker's position
+                        .title("My Location")
+                        .icon(markerColor)
+                    myMap?.addMarker(markerOptions)
+
+                    val zoomLevel = 16.0f // Adjust the zoom level as needed
+                    myMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(my_mark, zoomLevel))
+
+                }
+            }
+    }
+
+    private fun getUserLocationAndAddMarkers() {
+        // Initialize the location client
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        // Get the last known location
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
         fusedLocationClient.lastLocation
             .addOnSuccessListener(this@Hotspot) { location ->
                 if (location != null) {
@@ -125,7 +218,6 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
                     val zoomLevel = 12.0f // Adjust the zoom level as needed
                     myMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(my_mark, zoomLevel))
 
-
                     // Launch a coroutine to populate hotspots
                     CoroutineScope(Dispatchers.IO).launch {
                         val hotspotList = populateHotspots(location.latitude, location.longitude)
@@ -134,6 +226,8 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
                 }
             }
     }
+
+
 
     fun getDirectionURL(origin: LatLng, dest: LatLng): String {
 

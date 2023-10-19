@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -8,6 +9,7 @@
         android:layout_height="match_parent"
         android:background="#A0BFE2"
         android:orientation="vertical">
+
 
         <!-- Heading Layer -->
         <LinearLayout
@@ -73,13 +75,20 @@
                 android:textStyle="bold"/>
 
             <!-- Add Google Map -->
-            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="570dp"
+            <fragment
                 android:id="@+id/mapView"
-                tools:context=".MapsActivity"
-                android:name="com.google.android.gms.maps.SupportMapFragment" />
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="466dp"
+                tools:context=".MapsActivity" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Get Directions"
+                android:id="@+id/btnGetDirections">
+
+            </Button>
 
 
 

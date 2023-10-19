@@ -17,6 +17,8 @@ import android.widget.TextView
             return LayoutInflater.from(context).inflate(R.layout.list_item, parent, false)
         }
 
+
+
         override fun bindView(view: View, context: Context, cursor: Cursor) {
             // Retrieve data from the cursor and populate the views in the custom row layout
             val birdNameTextView = view.findViewById<TextView>(R.id.textBirdName)
@@ -34,7 +36,7 @@ import android.widget.TextView
             if (birdPhotoIndex != -1) {
                 birdPhotoData = cursor.getBlob(birdPhotoIndex)
             } else {
-                birdPhotoData = null // Handle the case where "BirdPhotoBlob" doesn't exist
+                birdPhotoData = null //Used to handle the case where "BirdPhotoBlob" doesn't exist
             }
 
             if (birdPhotoData != null) {
@@ -66,13 +68,6 @@ import android.widget.TextView
                 locationTextView.text = "N/A" // or handle the case where "Location" doesn't exist
             }
 
-            /*if (birdPhotoData != null) {
-                val birdPhotoBitmap = BitmapFactory.decodeByteArray(birdPhotoData, 0, birdPhotoData.size)
-                birdPhotoImageView.setImageBitmap(birdPhotoBitmap)
-            } else {
-                // Set a default image if no photo is available
-                birdPhotoImageView.setImageResource(R.drawable.jeff_bezos)
-            }*/
         }
     }
 

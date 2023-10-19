@@ -167,11 +167,17 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
             if(enteredPasswordHash == databaseHashPassword) {
                 validUser = true
-
             }
         }
 
         return validUser
+    }
+
+    //Allowing the user to update their settings
+    @SuppressLint("Range")
+    fun updateSettings(userID: Int, )
+    {
+
     }
 
     // Function to return the ID of the user.

@@ -73,6 +73,7 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
 
             val destination_marker = LatLng(latitudeDestination, longitudeDestination)
             val origin_marker = LatLng(latitudeOrigin, longitudeOrigin)
+
             // Add a marker for the user's location
             myMap?.addMarker(MarkerOptions().position(destination_marker).title("Destination"))
             myMap?.addMarker(MarkerOptions().position(origin_marker).title("Origin"))

@@ -166,7 +166,7 @@
                 <Spinner
                     android:id="@+id/spinnerDistance"
                     android:layout_width="100dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:background="@drawable/spinner_border"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp" />

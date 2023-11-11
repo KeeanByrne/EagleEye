@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Spinner
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 
 
@@ -21,6 +22,18 @@ class Settings : AppCompatActivity() {
         setContentView(R.layout.settings) // Connecting to the settings.xml
         populateMetricSpinner()      //Populating the Metric spinner
         populateDistanceSpinner()   //Populating the Max Distance spinner
+
+        //Logout method
+        val logoutUtil = LogoutUtil(this)
+
+        val btnLogout = findViewById<Button>(R.id.btnLogout)
+
+        btnLogout.setOnClickListener {
+            logoutUtil.showLogoutConfirmationDialog {
+                logoutUtil.logout() // Call the logout function when the user confirms
+            }
+        }
+
 
 
         /* Returning to the home screen */
@@ -49,6 +62,14 @@ class Settings : AppCompatActivity() {
             NewSettings.Password = findViewById<EditText>(R.id.editPassword).text.toString();
             db.updateSettings(db.returnID(findViewById<EditText>(R.id.editUsername).text.toString()), NewSettings)
         }
+    }
+
+    fun logout() {
+
+        // Navigate the user to the login screen
+        val intent = Intent(this, Login::class.java)
+        startActivity(intent)
+        finish()
     }
 
     // Populating the unit spinner with Km and Mi.

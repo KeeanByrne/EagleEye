@@ -68,6 +68,8 @@ class Login : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Your Username And/Or Password Is Incorrect!", Toast.LENGTH_SHORT).show()
         }*/
+
+        //New firebase code
         val auth = FirebaseAuth.getInstance()
 
         auth.signInWithEmailAndPassword(usernameCheck, passwordCheck)

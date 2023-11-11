@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1033650731749",
+    "firebase_url": "https://eagleeye-2d579-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "eagleeye-2d579",
+    "storage_bucket": "eagleeye-2d579.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1033650731749:android:89953e0be8bb69807db20c",
+        "android_client_info": {
+          "package_name": "com.example.eagleeye"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzUsjK308vNPkg_bsV48ksz6tD7SSWdSE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

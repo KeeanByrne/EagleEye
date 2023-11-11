@@ -1,12 +1,16 @@
 package com.example.eagleeye
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
 class Signup : AppCompatActivity() {
 
@@ -23,8 +27,12 @@ class Signup : AppCompatActivity() {
             startActivity(intent)
         }
 
+        //Old SQLite DB
         // Creating an object for the database process.
-        val db = DBHelper(this, null)
+        //val db = DBHelper(this, null)
+
+        //New Firebase DB
+        val db = Firebase.firestore
 
         btn_signup = findViewById(R.id.btnSaveAccount)
         btn_signup.setOnClickListener{
@@ -142,7 +150,8 @@ class Signup : AppCompatActivity() {
                 Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener // Stop execution if any field is invalid
             } else{
-                db.registerUser(firstName, surname, username, email, password);
+                //Old SQLite code
+                /*db.registerUser(firstName, surname, username, email, password);
 
                 // Clearing the text after signing up.
                 txtFirstName.setText("");
@@ -151,7 +160,27 @@ class Signup : AppCompatActivity() {
                 txtPassword.setText("");
                 txtPasswordConfirmation.setText("");
                 val intent = Intent(this@Signup, Login::class.java)
-                startActivity(intent) }
+                startActivity(intent) */
+
+                //New Firebase code
+                val user = hashMapOf(
+                    "Email" to email,
+                    "Firstname" to firstName,
+                    "Password" to password,
+                    "Surname" to surname,
+                    "Username" to username
+                )
+                db.collection("user")
+                    .add(user)
+                    .addOnSuccessListener { documentReference ->
+                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                        val intent = Intent(this@Signup, Login::class.java)
+                        startActivity(intent)
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w(TAG, "Error adding document", e)
+                    }
+            }
 
         }
 

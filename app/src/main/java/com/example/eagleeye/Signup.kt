@@ -10,6 +10,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 
 class Signup : AppCompatActivity() {
@@ -31,8 +33,10 @@ class Signup : AppCompatActivity() {
         // Creating an object for the database process.
         //val db = DBHelper(this, null)
 
-        //New Firebase DB
+        //New Firebase DB and Auth
         val db = Firebase.firestore
+        val auth = Firebase.auth
+
 
         btn_signup = findViewById(R.id.btnSaveAccount)
         btn_signup.setOnClickListener{
@@ -170,15 +174,36 @@ class Signup : AppCompatActivity() {
                     "Surname" to surname,
                     "Username" to username
                 )
-                db.collection("user")
-                    .add(user)
-                    .addOnSuccessListener { documentReference ->
-                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-                        val intent = Intent(this@Signup, Login::class.java)
-                        startActivity(intent)
-                    }
-                    .addOnFailureListener { e ->
-                        Log.w(TAG, "Error adding document", e)
+                auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success")
+                            val firebaseUser: FirebaseUser? = auth.currentUser
+
+                            // Now you can update your Firestore database with user information
+                            // For example, you can use the UID as the document ID
+                            if (firebaseUser != null) {
+                                db.collection("user")
+                                    .document(firebaseUser.uid)
+                                    .set(user)
+                                    .addOnSuccessListener {
+                                        Log.d(TAG, "DocumentSnapshot added with ID: ${firebaseUser.uid}")
+                                        val intent = Intent(this@Signup, Login::class.java)
+                                        startActivity(intent)
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.w(TAG, "Error adding document", e)
+                                    }
+                            }
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.exception)
+                            Toast.makeText(baseContext, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show()
+                            // Update UI accordingly
+                        }
                     }
             }
 

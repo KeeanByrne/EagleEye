@@ -61,9 +61,6 @@ class Sighting : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sighting)
 
-        //Old SQLite database code
-        //val db = DBHelper(this, null)
-
         //New Firebase code
         val db = Firebase.firestore
         val auth = Firebase.auth
@@ -90,34 +87,13 @@ class Sighting : AppCompatActivity() {
             val latinName = latinNameEditText.text.toString()
             val location = locationEditText.text.toString()
 
-            //Old SQLite code
-            /*if (birdName.isNotEmpty() && latinName.isNotEmpty() && location.isNotEmpty()) {
-                if (capturedImageByteArray != null) {
-                    // Image is captured, so you can save it along with other information
-                    db.addSightingWithImage(birdName, latinName, location, capturedImageByteArray)
-                } else {
-                    // Image is not captured, save other information without an image
-                    db.addSighting(birdName, latinName, location)
-                }
-
-                // Optionally, you can clear the input fields after saving
-                birdNameEditText.text.clear()
-                latinNameEditText.text.clear()
-                locationEditText.text.clear()
-                capturedImageByteArray = null
-
-                Toast.makeText(this, "Sighting saved", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
-            }*/
-
             //New Firebase code
             if (birdName.isNotEmpty() && latinName.isNotEmpty() && location.isNotEmpty()) {
                 val sightingData = hashMapOf(
                     "BirdName" to birdName,
                     "LatinName" to latinName,
                     "Location" to location,
-                    "UserID" to auth.currentUser?.uid  // Use uid instead of the whole user object
+                    "UserID" to auth.currentUser?.uid
                 )
 
                 if (capturedImageByteArray != null) {

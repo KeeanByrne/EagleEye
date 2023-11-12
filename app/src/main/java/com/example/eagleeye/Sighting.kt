@@ -17,6 +17,9 @@ import android.graphics.Bitmap
 import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.firestore
 import java.io.ByteArrayOutputStream
 
 
@@ -58,7 +61,12 @@ class Sighting : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sighting)
 
-        val db = DBHelper(this, null)
+        //Old SQLite database code
+        //val db = DBHelper(this, null)
+
+        //New Firebase code
+        val db = Firebase.firestore
+        val auth = Firebase.auth
 
         birdNameEditText = findViewById(R.id.birdNameTxt)
         latinNameEditText = findViewById(R.id.latinNameTxt)
@@ -82,7 +90,8 @@ class Sighting : AppCompatActivity() {
             val latinName = latinNameEditText.text.toString()
             val location = locationEditText.text.toString()
 
-            if (birdName.isNotEmpty() && latinName.isNotEmpty() && location.isNotEmpty()) {
+            //Old SQLite code
+            /*if (birdName.isNotEmpty() && latinName.isNotEmpty() && location.isNotEmpty()) {
                 if (capturedImageByteArray != null) {
                     // Image is captured, so you can save it along with other information
                     db.addSightingWithImage(birdName, latinName, location, capturedImageByteArray)
@@ -100,7 +109,36 @@ class Sighting : AppCompatActivity() {
                 Toast.makeText(this, "Sighting saved", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+            }*/
+
+            //New Firebase code
+            if (birdName.isNotEmpty() && latinName.isNotEmpty() && location.isNotEmpty()) {
+                val sightingData = hashMapOf(
+                    "BirdName" to birdName,
+                    "LatinName" to latinName,
+                    "Location" to location,
+                    "UserID" to auth.currentUser?.uid  // Use uid instead of the whole user object
+                )
+
+                if (capturedImageByteArray != null) {
+                    // Convert byte array to Base64-encoded string before saving
+                    val imageBase64 = android.util.Base64.encodeToString(capturedImageByteArray, android.util.Base64.DEFAULT)
+                    sightingData["Image"] = imageBase64
+                }
+
+                db.collection("sighting")
+                    .add(sightingData)
+                    .addOnSuccessListener { documentReference ->
+                        Toast.makeText(this, "Sighting saved", Toast.LENGTH_SHORT).show()
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(this, "Error saving sighting: $e", Toast.LENGTH_SHORT).show()
+                    }
+            } else {
+                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
             }
+
+
         })
 
     }

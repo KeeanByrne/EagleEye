@@ -71,10 +71,11 @@
                 android:textSize="25dp"
                 android:textStyle="bold" />
 
-            <ListView
-                android:id="@+id/listViewObservations"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="550dp"
+                android:layout_weight="1" />
 
 
         </LinearLayout>

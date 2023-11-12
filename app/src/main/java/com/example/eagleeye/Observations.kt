@@ -1,50 +1,82 @@
 package com.example.eagleeye
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
-import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
-import android.database.sqlite.SQLiteDatabase
-import android.database.Cursor
-import com.example.eagleeye.DBHelper.Companion.Sighting_Table
-
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.eagleeye.adapters.SightingFirebaseAdapter
+import com.example.eagleeye.models.Sighting
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 
 class Observations : AppCompatActivity() {
 
     private lateinit var btnHomeScreen: ImageView
+    private lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
+    private lateinit var auth: FirebaseAuth
+    private lateinit var firestore: FirebaseFirestore
+    private lateinit var adapter: SightingFirebaseAdapter
 
-    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.observations) // Connecting to the observations.xml
+        setContentView(R.layout.observations)
 
-        /* Returning to the home screen */
-        /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
-        btnHomeScreen = findViewById<ImageView>(R.id.homeBtn);
+        // Initialize Firebase components
+        auth = FirebaseAuth.getInstance()
+        firestore = FirebaseFirestore.getInstance()
 
+        // Find views
+        btnHomeScreen = findViewById(R.id.homeBtn)
+        recyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        // Setup click listener for home button
         btnHomeScreen.setOnClickListener {
-            // Add your code here to handle the click event
-            // For example, you can open a new activity or perform some action.
-
-            // Taking the user to the homepage.
             val intent = Intent(this@Observations, Home::class.java)
-            startActivity(intent);
-
+            startActivity(intent)
         }
-        /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
-        // Retrieve data from the database and get a cursor
-        val dbHelper = DBHelper(this, null)
-        val db: SQLiteDatabase = dbHelper.readableDatabase
-        val cursor = db.rawQuery("SELECT Id as _id, BirdName, LatinName, Location, BirdPhotoBlob, Timestamp FROM $Sighting_Table", null)
 
-        // Find the ListView and set up the custom adapter
-        val listView: ListView = findViewById(R.id.listViewObservations)
-        val adapter = SightingCursorAdapter(this, cursor, 0)
-        listView.adapter = adapter
-
-
+        // Load observations based on the current user's UID
+        loadObservations(auth.currentUser?.uid)
     }
 
+    private fun loadObservations(userId: String?) {
+        Log.d("Observations", "loadObservations started. userId: $userId")
+
+        if (userId != null) {
+            // Query Firestore to get observations for the current user
+            val query: Query = firestore.collection("sighting")
+                .whereEqualTo("UserID", userId)
+
+            // Create FirestoreRecyclerOptions using the sightings list
+            val options = FirestoreRecyclerOptions.Builder<Sighting>()
+                .setQuery(query, Sighting::class.java)
+                .build()
+
+            // Create a custom adapter to populate the RecyclerView
+            adapter = SightingFirebaseAdapter(options, this)
+
+            // Attach the adapter to the RecyclerView
+            recyclerView.adapter = adapter
+
+            Log.d("Observations", "Adapter set for RecyclerView.")
+        } else {
+            Log.e("Observations", "userId is null.")
+        }
+    }
+
+    // Override onStart and onStop to start and stop observing changes when the activity is in the foreground
+    override fun onStart() {
+        super.onStart()
+        adapter.startListening()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        adapter.stopListening()
+    }
 }

@@ -21,9 +21,9 @@ import android.widget.TextView
 
         override fun bindView(view: View, context: Context, cursor: Cursor) {
             // Retrieve data from the cursor and populate the views in the custom row layout
-            val birdNameTextView = view.findViewById<TextView>(R.id.textBirdName)
-            val latinNameTextView = view.findViewById<TextView>(R.id.textLatinName)
-            val locationTextView = view.findViewById<TextView>(R.id.textLocation)
+            val birdNameTextView = view.findViewById<TextView>(R.id.birdNameTextView)
+            val latinNameTextView = view.findViewById<TextView>(R.id.latinNameTextView)
+            val locationTextView = view.findViewById<TextView>(R.id.locationTextView)
             val birdPhotoImageView = view.findViewById<ImageView>(R.id.imageBirdPhoto)
 
 

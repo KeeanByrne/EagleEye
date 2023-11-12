@@ -23,4 +23,5 @@
         item
     </string>
     <string name="Test_String">Test Updated</string>
+    <string name="bird_photo_description">Bird Photo Goes Here</string>
 </resources>

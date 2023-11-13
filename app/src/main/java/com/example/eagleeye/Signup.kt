@@ -167,35 +167,30 @@ class Signup : AppCompatActivity() {
                 startActivity(intent) */
 
                 //New Firebase code
-                val user = hashMapOf(
-                    "Email" to email,
-                    "Firstname" to firstName,
-                    "Password" to password,
-                    "Surname" to surname,
-                    "Username" to username
-                )
                 auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
+                            //Variable to store the user's personal settings
+                            val settings = hashMapOf(
+                                "firstName" to firstName,
+                                "surname" to surname,
+                                "username" to username,
+                                "profilePic" to null,
+                                "metric" to "KM",
+                                "maxDistance" to "50",
+                                "userID" to (auth.currentUser?.uid ?: "How did this happen?")
+                            )
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success")
-                            val firebaseUser: FirebaseUser? = auth.currentUser
-
-                            // Now you can update your Firestore database with user information
-                            // For example, you can use the UID as the document ID
-                            if (firebaseUser != null) {
-                                db.collection("user")
-                                    .document(firebaseUser.uid)
-                                    .set(user)
-                                    .addOnSuccessListener {
-                                        Log.d(TAG, "DocumentSnapshot added with ID: ${firebaseUser.uid}")
-                                        val intent = Intent(this@Signup, Login::class.java)
-                                        startActivity(intent)
-                                    }
-                                    .addOnFailureListener { e ->
-                                        Log.w(TAG, "Error adding document", e)
-                                    }
-                            }
+                            db.collection("settings")
+                                .add(settings).addOnSuccessListener {
+                                    Log.d(TAG, "DocumentSnapshot ${settings} added.")
+                                    val intent = Intent(this@Signup, Home::class.java)
+                                    startActivity(intent)
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w(TAG, "Error adding document", e)
+                                }
 
                         } else {
                             // If sign in fails, display a message to the user.

@@ -174,12 +174,12 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     }
 
     //Allowing the user to update their settings
-    @SuppressLint("Range")
+    /*@SuppressLint("Range")
     fun updateSettings(userID: String, newSettings: SettingsData)
     {
         val db = this.writableDatabase
 
-    }
+    }*/
 
     // Function to return the ID of the user.
     @SuppressLint("Range")

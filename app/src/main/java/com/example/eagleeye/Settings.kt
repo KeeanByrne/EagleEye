@@ -50,7 +50,7 @@ class Settings : AppCompatActivity() {
 
         };*/
         /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
-        val btnSaveAccount = findViewById<Button>(R.id.btnSaveAccount);
+        /*val btnSaveAccount = findViewById<Button>(R.id.btnSaveAccount);
         val db = DBHelper(this, null);
         btnSaveAccount.setOnClickListener {
             val NewSettings = SettingsData();
@@ -61,7 +61,7 @@ class Settings : AppCompatActivity() {
             NewSettings.UserID = db.returnID(findViewById<EditText>(R.id.editUsername).text.toString());
             NewSettings.Password = findViewById<EditText>(R.id.editPassword).text.toString();
             db.updateSettings(db.returnID(findViewById<EditText>(R.id.editUsername).text.toString()), NewSettings)
-        }
+        }*/
     }
 
     fun logout() {

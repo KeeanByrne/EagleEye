@@ -11,6 +11,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -35,6 +36,8 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.net.URLEncoder
 
+
+
 class Hotspot : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private lateinit var btnHomeScreen: ImageView
@@ -55,6 +58,7 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.hotspots)
+
 
         /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
         if (ContextCompat.checkSelfPermission(
@@ -244,7 +248,7 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         return url
     }
 
-    private inner class GetDirection(val url : String) : AsyncTask<Void, Void, List<List<LatLng>>>(){
+    /*private inner class GetDirection(val url : String) : AsyncTask<Void, Void, List<List<LatLng>>>(){
         override fun doInBackground(vararg params: Void?): List<List<LatLng>> {
             val client = OkHttpClient()
             val request = Request.Builder().url(url).build()
@@ -288,7 +292,78 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
                 myMap?.addPolyline(lineoption)
             }
         }
+    }*/
+
+    private inner class GetDirection(val url: String) : AsyncTask<Void, Void, List<List<LatLng>>>() {
+        private lateinit var respObj: GoogleMapDTO
+
+        override fun doInBackground(vararg params: Void?): List<List<LatLng>> {
+            val client = OkHttpClient()
+            val request = Request.Builder().url(url).build()
+            val response = client.newCall(request).execute()
+            val data = response.body!!.string()
+            Log.d("GoogleMap", "API Response: $data")
+
+            val result = ArrayList<List<LatLng>>()
+            try {
+                respObj = Gson().fromJson(data, GoogleMapDTO::class.java)
+
+                if (respObj.routes.isNotEmpty()) {
+                    for ((index, route) in respObj.routes.withIndex()) {
+                        Log.d("GoogleMap", "Route $index:")
+                        Log.d("GoogleMap", " - Legs: ${route.legs.size}")
+                        Log.d("GoogleMap", " - Distance: ${route.legs[0].distance.text}")
+                        Log.d("GoogleMap", " - Duration: ${route.legs[0].duration.text}")
+
+                        val path = ArrayList<LatLng>()
+                        for (i in route.legs[0].steps.indices) {
+                            path.addAll(decodePolyline(route.legs[0].steps[i].polyline.points))
+                        }
+                        result.add(path)
+                    }
+                } else {
+                    Log.d("GoogleMap", "No routes found in the response.")
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            return result
+        }
+
+        override fun onPostExecute(result: List<List<LatLng>>) {
+            for (i in result.indices) {
+                val lineoption = PolylineOptions()
+                lineoption.addAll(result[i])
+                lineoption.width(20f)
+                lineoption.color(Color.BLUE)
+                lineoption.geodesic(true)
+                myMap?.addPolyline(lineoption)
+            }
+
+            // Assuming there is at least one route
+            if (::respObj.isInitialized && respObj.routes.isNotEmpty() && respObj.routes[0].legs.isNotEmpty()) {
+                val distance = respObj.routes[0].legs[0].distance.text
+                val duration = respObj.routes[0].legs[0].duration.text
+
+                // Show distance and duration in a popup
+                val alertDialogBuilder = AlertDialog.Builder(this@Hotspot)
+                alertDialogBuilder.setTitle("Route Information")
+                alertDialogBuilder.setMessage("Distance: $distance\nDuration: $duration")
+
+                alertDialogBuilder.setPositiveButton("OK") { dialog, which ->
+                    // Do something when OK button is pressed
+                }
+
+                val alertDialog = alertDialogBuilder.create()
+                alertDialog.show()
+            } else {
+                Log.d("GoogleMap", "No valid route information.")
+            }
+        }
     }
+
+
+
 
     override fun onMarkerClick(p0: Marker): Boolean {
         // Check if the clicked marker is not null
@@ -343,7 +418,8 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         }
     }
 
-    public fun decodePolyline(encoded: String): List<LatLng> {
+
+ public fun decodePolyline(encoded: String): List<LatLng> {
 
         val poly = ArrayList<LatLng>()
         var index = 0

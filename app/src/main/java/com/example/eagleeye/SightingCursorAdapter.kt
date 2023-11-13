@@ -3,6 +3,7 @@ package com.example.eagleeye
 import android.content.Context
 import android.database.Cursor
 import android.graphics.BitmapFactory
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,11 +13,17 @@ import android.widget.TextView
 
     class SightingCursorAdapter(context: Context, cursor: Cursor?, flags: Int) : CursorAdapter(context, cursor, flags) {
 
+
         override fun newView(context: Context, cursor: Cursor, parent: ViewGroup): View {
             // Inflating your custom row layout for each list item
-            return LayoutInflater.from(context).inflate(R.layout.list_item, parent, false)
-        }
+            val view = LayoutInflater.from(context).inflate(R.layout.list_item, parent, false)
 
+            // Log the ID of the ImageView
+            val birdPhotoImageView = view.findViewById<ImageView>(R.id.birdPhotoImageView)
+            Log.d("SightingCursorAdapter", "ImageView ID: ${birdPhotoImageView.id}")
+
+            return view
+        }
 
 
         override fun bindView(view: View, context: Context, cursor: Cursor) {
@@ -24,7 +31,8 @@ import android.widget.TextView
             val birdNameTextView = view.findViewById<TextView>(R.id.birdNameTextView)
             val latinNameTextView = view.findViewById<TextView>(R.id.latinNameTextView)
             val locationTextView = view.findViewById<TextView>(R.id.locationTextView)
-            val birdPhotoImageView = view.findViewById<ImageView>(R.id.imageBirdPhoto)
+            val birdPhotoImageView = view.findViewById<ImageView>(R.id.birdPhotoImageView)
+
 
 
             val birdNameIndex = cursor.getColumnIndex("BirdName")
@@ -41,7 +49,7 @@ import android.widget.TextView
 
             if (birdPhotoData != null) {
                 val birdPhotoBitmap = BitmapFactory.decodeByteArray(birdPhotoData, 0, birdPhotoData.size)
-                birdPhotoImageView.setImageBitmap(birdPhotoBitmap)
+                /*birdPhotoImageView.setImageBitmap(birdPhotoBitmap)*/
             } else {
                 // Set a default image if no photo is available
                 birdPhotoImageView.setImageResource(R.drawable.eagle_eye_df)

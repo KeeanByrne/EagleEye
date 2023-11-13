@@ -29,14 +29,9 @@ class Signup : AppCompatActivity() {
             startActivity(intent)
         }
 
-        //Old SQLite DB
-        // Creating an object for the database process.
-        //val db = DBHelper(this, null)
-
         //New Firebase DB and Auth
         val db = Firebase.firestore
         val auth = Firebase.auth
-
 
         btn_signup = findViewById(R.id.btnSaveAccount)
         btn_signup.setOnClickListener{
@@ -126,26 +121,6 @@ class Signup : AppCompatActivity() {
 
             //------------------------------------------------------------------------------------//
 
-
-            /*if(password == passwordConfiramtion) {
-
-                // Passing the information into the method which will be stored in the database.
-                db.registerUser(firstName, surname, username, email, password);
-
-                // Clearing the text after signing up.
-                txtFirstName.setText("");
-                txtSurname.setText("");
-                txtEmailAddress.setText("");
-                txtPassword.setText("");
-                txtPasswordConfirmation.setText("");
-
-                *//*val intent = Intent(this@Signup, Login::class.java)
-                startActivity(intent)*//*
-
-            } else {
-                Toast.makeText(this, "Password must match with password confirmation", Toast.LENGTH_SHORT).show()
-            }*/
-
             //checking for errors and displaying toast message if any are found
             if (invalidFields.isNotEmpty()) {
                 val errorMessage = "Invalid input/s. Please check the following field(s): ${
@@ -154,19 +129,7 @@ class Signup : AppCompatActivity() {
                 Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener // Stop execution if any field is invalid
             } else{
-                //Old SQLite code
-                /*db.registerUser(firstName, surname, username, email, password);
 
-                // Clearing the text after signing up.
-                txtFirstName.setText("");
-                txtSurname.setText("");
-                txtEmailAddress.setText("");
-                txtPassword.setText("");
-                txtPasswordConfirmation.setText("");
-                val intent = Intent(this@Signup, Login::class.java)
-                startActivity(intent) */
-
-                //New Firebase code
                 auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
@@ -178,6 +141,8 @@ class Signup : AppCompatActivity() {
                                 "profilePic" to null,
                                 "metric" to "KM",
                                 "maxDistance" to "50",
+                                /*If execution has reached this point there is a valid current user
+                                with a valid UID so the false case should never happen*/
                                 "userID" to (auth.currentUser?.uid ?: "How did this happen?")
                             )
                             // Sign in success, update UI with the signed-in user's information
@@ -197,7 +162,6 @@ class Signup : AppCompatActivity() {
                             Log.w(TAG, "createUserWithEmail:failure", task.exception)
                             Toast.makeText(baseContext, "Authentication failed.",
                                 Toast.LENGTH_SHORT).show()
-                            // Update UI accordingly
                         }
                     }
             }

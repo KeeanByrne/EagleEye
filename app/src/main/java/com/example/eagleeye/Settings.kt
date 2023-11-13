@@ -10,6 +10,9 @@ import android.widget.ImageView
 import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 
 
 class Settings : AppCompatActivity() {
@@ -25,12 +28,16 @@ class Settings : AppCompatActivity() {
 
         //Logout method
         val logoutUtil = LogoutUtil(this)
+        //Firebase setup
+        val firebaseAuth = FirebaseAuth.getInstance()
 
         val btnLogout = findViewById<Button>(R.id.btnLogout)
 
         btnLogout.setOnClickListener {
             logoutUtil.showLogoutConfirmationDialog {
-                logoutUtil.logout() // Call the logout function when the user confirms
+                //Added to sign the user out of Firebase Auth
+                firebaseAuth.signOut()
+                logoutUtil.logout()
             }
         }
 

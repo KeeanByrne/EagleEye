@@ -1,11 +1,18 @@
 package com.example.eagleeye
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.firestore
 
 class Signup : AppCompatActivity() {
 
@@ -16,45 +23,147 @@ class Signup : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.signup)
 
-        // Creating an object for the database process.
-        val db = DBHelper(this, null)
+        val loginText = findViewById<TextView>(R.id.loginText)
+        loginText.setOnClickListener{
+            val intent = Intent(this,Login::class.java)
+            startActivity(intent)
+        }
 
-        btn_signup = findViewById(R.id.btnSaveAccount);
+        //New Firebase DB and Auth
+        val db = Firebase.firestore
+        val auth = Firebase.auth
+
+        btn_signup = findViewById(R.id.btnSaveAccount)
         btn_signup.setOnClickListener{
+
+            // Perform validations
+            val validation = Validation()
+            val invalidFields = mutableListOf<String>()
+
+            //---------------------Input and Validation for First Name----------------------------//
+
             var txtFirstName = findViewById<EditText>(R.id.editFirstName);
-            var firstName = txtFirstName.text.toString() // Storing the firstName;
+            var firstName = txtFirstName.text.toString() // Storing the FirstName;
+
+            //validating firstname
+            if (!validation.validateStringsWithoutNumbers(firstName)) {
+                invalidFields.add("Firstname")
+                txtFirstName.error = "Only letters allowed!"
+            }
+
+            //------------------------------------------------------------------------------------//
+
+
+
+            //---------------------Input and Validation for Surname-------------------------------//
 
             var txtSurname = findViewById<EditText>(R.id.editSurname);
-            var surname = txtSurname.text.toString() // Storing the firstName;
+            var surname = txtSurname.text.toString() // Storing the Surname;
+
+            if (!validation.validateStringsWithoutNumbers(surname)) {
+                invalidFields.add("Surname")
+                txtSurname.error = "Only letters allowed!"
+            }
+
+            //------------------------------------------------------------------------------------//
+
+
+
+            //---------------------Input and Validation for Userame-------------------------------//
 
             var txtUsername = findViewById<EditText>(R.id.editUsername);
             var username = txtUsername.text.toString(); // Storing the username
 
+            if (!validation.validateStringsWithNumbers(username) || username.length < 5) {
+                invalidFields.add("Username")
+                txtUsername.error = "Only letters and numbers are allowed allowed and it needs to be longer than 5 characters"
+            }
+
+
+            //------------------------------------------------------------------------------------//
+
+
+
+            //---------------------Input and Validation for Email Address-------------------------//
             var txtEmailAddress = findViewById<EditText>(R.id.editEmailAddress);
             var email = txtEmailAddress.text.toString(); // Storing the email
 
+            if (!validation.validEmail(email)) {
+                invalidFields.add("Email Address")
+                txtEmailAddress.error = "Must be a valid email address"
+            }
+
+
+            //------------------------------------------------------------------------------------//
+
+
+            //---------------------Input and Validation for Password------------------------------//
             var txtPassword = findViewById<EditText>(R.id.editPassword);
             var password = txtPassword.text.toString(); // Storing the password
 
+            if (password.length < 7) {
+                invalidFields.add("Password")
+                txtPassword.error = "Password must be longer than 7 characters"
+            }
+
+            //------------------------------------------------------------------------------------//
+
+
+
+            //---------------------Input and Validation for Confirm Password ---------------------//
             var txtPasswordConfirmation = findViewById<EditText>(R.id.editPasswordConfirmation);
             var passwordConfiramtion = txtPasswordConfirmation.text.toString(); // Storing the password.
 
-            if(password == passwordConfiramtion) {
+            if (password != passwordConfiramtion) {
+                invalidFields.add("confirmPassword")
+                txtPasswordConfirmation.error = "Both passwords need to match"
+            }
 
-                // Passing the information into the method which will be stored in the database.
-                db.registerUser(firstName, surname, username, email, password);
+            //------------------------------------------------------------------------------------//
 
-                // Clearing the text after signing up.
-                txtFirstName.setText("");
-                txtSurname.setText("");
-                txtEmailAddress.setText("");
-                txtPassword.setText("");
-                txtPasswordConfirmation.setText("");
+            //checking for errors and displaying toast message if any are found
+            if (invalidFields.isNotEmpty()) {
+                val errorMessage = "Invalid input/s. Please check the following field(s): ${
+                    invalidFields.joinToString(", ")
+                }"
+                Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+                return@setOnClickListener // Stop execution if any field is invalid
+            } else{
 
-                val intent = Intent(this@Signup, Login::class.java)
-                startActivity(intent)
-            } else {
-                Toast.makeText(this, "Password must match with password confirmation", Toast.LENGTH_SHORT).show()
+                auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            //Variable to store the user's personal settings
+                            val settings = hashMapOf(
+                                "firstName" to firstName,
+                                "surname" to surname,
+                                "username" to username,
+                                "profilePic" to null,
+                                "metric" to "KM",
+                                "maxDistance" to "50",
+                                /*If execution has reached this point there is a valid current user
+                                with a valid UID so the false case should never happen*/
+                                "userID" to (auth.currentUser?.uid ?: "How did this happen?")
+                            )
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success")
+                            db.collection("settings")
+                                .add(settings).addOnSuccessListener {
+                                    Log.d(TAG, "DocumentSnapshot ${settings} added.")
+                                    val intent = Intent(this@Signup, Home::class.java)
+                                    startActivity(intent)
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w(TAG, "Error adding document", e)
+                                }
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.exception)
+                            Toast.makeText(baseContext, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show()
+                        }
+                    }
             }
 
         }

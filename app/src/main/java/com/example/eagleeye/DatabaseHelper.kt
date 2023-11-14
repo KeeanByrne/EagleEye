@@ -8,6 +8,10 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.icu.text.AlphabeticIndex.Record
+import android.util.Log
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 // Database Helper is the file that will be used for making database
 // queries and creating the appropriate database tables.
@@ -35,7 +39,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 "RouteColour" + " VARCHAR, " +
                 "AppMainColour" + " VARCHAR, " +
                 "DistanceMinimum" + " INTEGER, " +
-                "DistanceMaximum" + " INTEGER " +
+                "DistanceMaximum" + " INTEGER, " +
                 "FOREIGN KEY(UserID) REFERENCES " + User_Table + "(Id)" + // Define the foreign key constraint
                 ")")
 
@@ -45,7 +49,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 "Name" + " VARCHAR, " +
                 "Lattitude" + " VARCHAR, " +
                 "Longitude" + " VARCHAR, " +
-                "Counry " + "VARCHAR " +
+                "Country " + "VARCHAR " +
                 ")")
 
         // Table to have the species
@@ -70,6 +74,17 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 "FOREIGN KEY(SpeciesID) REFERENCES " + Species_Table + "(Id) " + // Define the foreign key constraint
                 ")")
 
+        // Table to store sightings.
+        val sighting_create_query = ("CREATE TABLE " + Sighting_Table + " (" +
+                "Id" + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "BirdName" + " VARCHAR, " +
+                "LatinName" + " VARCHAR, " +
+                "Location" + " VARCHAR, " +
+                "BirdPhotoBlob" + " BLOB, " +
+                "Timestamp" + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
+                ")"
+                )
+
 
         // Table to store the species observed.
 
@@ -80,6 +95,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.execSQL(hotspot_create_query) // Creating the Hotspot Table.
         db.execSQL(species_create_query) // Creating the Species Table.
         db.execSQL(record_create_query) // Creating the record Table.
+        db.execSQL(sighting_create_query) // Creating the sighting Table.
 
 
 
@@ -93,6 +109,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.execSQL("DROP TABLE IF EXISTS " + User_Table)
         db.execSQL("DROP TABLE IF EXISTS " + Hotspot_Table)
         db.execSQL("DROP TABLE IF EXISTS " + Species_Table)
+        db.execSQL("DROP TABLE IF EXISTS " + Sighting_Table)
 
         onCreate(db)
     }
@@ -150,12 +167,19 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
             if(enteredPasswordHash == databaseHashPassword) {
                 validUser = true
-
             }
         }
 
         return validUser
     }
+
+    //Allowing the user to update their settings
+    /*@SuppressLint("Range")
+    fun updateSettings(userID: String, newSettings: SettingsData)
+    {
+        val db = this.writableDatabase
+
+    }*/
 
     // Function to return the ID of the user.
     @SuppressLint("Range")
@@ -191,7 +215,64 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val Hotspot_Table = "Hotspot"
         val Species_Table = "Species"
         val Record_Table = "Record"
+        val Sighting_Table = "Sighting"
 
 
     }
+
+
+    //-------Method to add a new bird sighting to the database-------//
+    fun addSighting(birdName: String, latinName: String, location: String) {
+        val db = this.writableDatabase
+        val values = ContentValues()
+
+        values.put("BirdName", birdName)
+        values.put("LatinName", latinName)
+        values.put("Location", location)
+
+        //Method for getting the current timestamp as a string
+        val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+        values.put("Timestamp", timestamp)
+
+        db.insert(Sighting_Table, null, values)
+        db.close()
+    }
+
+    fun addSightingWithImage(birdName: String, latinName: String, location: String, birdPhoto: ByteArray?) {
+        val db = this.writableDatabase
+
+        db.beginTransaction()
+
+        try {
+            val values = ContentValues()
+            values.put("BirdName", birdName)
+            values.put("LatinName", latinName)
+            values.put("Location", location)
+            values.put("BirdPhotoBlob", birdPhoto)
+
+            val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+            values.put("Timestamp", timestamp)
+
+            //Inserting the data into the database
+            val result = db.insert(Sighting_Table, null, values)
+
+            //--------------------------Debugging code--------------------------//
+            if (result != -1L) {
+                Log.d("AddSightingWithImage", "Image saved successfully")
+            } else {
+                Log.e("AddSightingWithImage", "Image not saved to the database")
+            }
+            //--------------------------Debugging code--------------------------//
+
+
+            //Setting the transaction as successful
+            db.setTransactionSuccessful()
+        } finally {
+            //Ending the transaction
+            db.endTransaction()
+            db.close()
+        }
+    }
+
+
 }

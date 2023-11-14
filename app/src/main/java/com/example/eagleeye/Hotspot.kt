@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -26,8 +27,11 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
-import com.google.android.gms.tasks.OnSuccessListener
+import com.google.maps.android.PolyUtil
 import com.google.gson.Gson
+import com.google.maps.DirectionsApi
+import com.google.maps.GeoApiContext
+import com.google.maps.model.DirectionsResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,13 +41,17 @@ import okhttp3.Request
 import java.net.URLEncoder
 
 
-
 class Hotspot : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private lateinit var btnHomeScreen: ImageView
     private lateinit var btnGetDirections: Button
+    private lateinit var btnGetWalkingDistance: Button
+    private lateinit var btnGetAlternative: Button
+
     private lateinit var btnViewHotspot: Button
     private lateinit var btnMyLocation: Button
+
+    private lateinit var resultAlt: DirectionsResult
 
 
     private var myMap: GoogleMap? = null // Change to var to allow assignment
@@ -107,6 +115,7 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
             val URL = getDirectionURL(origin_marker, destination_marker)
             GetDirection(URL).execute()
 
+
         }
 
         /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -127,6 +136,28 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
 
             getMyLocationOnly()
         }
+
+        /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+
+        btnGetAlternative = findViewById(R.id.btnGetAlternativeDistance)
+
+        btnGetAlternative.setOnClickListener {
+
+            val destination_marker = LatLng(latitudeDestination, longitudeDestination)
+            val origin_marker = LatLng(latitudeOrigin, longitudeOrigin)
+
+            // Add a marker for the user's location
+            myMap?.addMarker(MarkerOptions().position(destination_marker).title("Destination"))
+            myMap?.addMarker(MarkerOptions().position(origin_marker).title("Origin"))
+
+            // Showing the route
+            val URL = getDirectionURLAlternative(origin_marker, destination_marker)
+            GetDirection(URL, true).execute()
+        }
+
+        /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
 
     }
 
@@ -231,8 +262,7 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
             }
     }
 
-
-
+    // One Route Only
     fun getDirectionURL(origin: LatLng, dest: LatLng): String {
 
         val encodedOrigin = URLEncoder.encode("${origin.latitude},${origin.longitude}", "UTF-8")
@@ -248,54 +278,31 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         return url
     }
 
-    /*private inner class GetDirection(val url : String) : AsyncTask<Void, Void, List<List<LatLng>>>(){
-        override fun doInBackground(vararg params: Void?): List<List<LatLng>> {
-            val client = OkHttpClient()
-            val request = Request.Builder().url(url).build()
-            val response = client.newCall(request).execute()
-            val data = response.body!!.string()
-            Log.d("GoogleMap" , " data : $data")
 
-            println("Testing Directions Route")
+    // Getting the route for walking.
+    fun getDirectionURLAlternative(origin: LatLng, dest: LatLng): String {
 
-            val result =  ArrayList<List<LatLng>>()
-            try{
-                val respObj = Gson().fromJson(data,GoogleMapDTO::class.java)
+        val encodedOrigin = URLEncoder.encode("${origin.latitude},${origin.longitude}", "UTF-8")
+        val encodedDestination = URLEncoder.encode("${dest.latitude},${dest.longitude}", "UTF-8")
+        val encodedAPI = URLEncoder.encode("AIzaSyD16EaDbQvz8oFV7pZfLDGUntO51P5-LpE")
 
-                val path =  ArrayList<LatLng>()
+        val url = "https://maps.googleapis.com/maps/api/directions/json" +
+                "?origin=$encodedOrigin" +
+                "&destination=$encodedDestination" +
+                "&sensor=false" +
+                "&mode=walking" +  // Change this line to set the mode to walking
+                "&key=$encodedAPI"
 
-                for (i in 0..(respObj.routes[0].legs[0].steps.size-1)){
-//                    val startLatLng = LatLng(respObj.routes[0].legs[0].steps[i].start_location.lat.toDouble()
-//                            ,respObj.routes[0].legs[0].steps[i].start_location.lng.toDouble())
-//                    path.add(startLatLng)
-//                    val endLatLng = LatLng(respObj.routes[0].legs[0].steps[i].end_location.lat.toDouble()
-//                            ,respObj.routes[0].legs[0].steps[i].end_location.lng.toDouble())
-                    path.addAll(decodePolyline(respObj.routes[0].legs[0].steps[i].polyline.points))
-                }
-                result.add(path)
-            }catch (e:Exception){
-                e.printStackTrace()
-            }
-            return result
-        }
+        return url
+    }
 
-        override fun onPostExecute(result: List<List<LatLng>>) {
-            val lineoption = PolylineOptions()
-            for (i in result.indices){
-                lineoption.addAll(result[i])
-                lineoption.width(10f)
-                lineoption.color(Color.BLUE)
-                lineoption.geodesic(true)
-            }
 
-            runOnUiThread {
-                myMap?.addPolyline(lineoption)
-            }
-        }
-    }*/
+    // Process for Getting Multiple Routes.
+    // ------------------------------------------------------------------------------------
 
-    private inner class GetDirection(val url: String) : AsyncTask<Void, Void, List<List<LatLng>>>() {
+    private inner class GetDirection(val url: String, isAlternativeRoute: Boolean = false) : AsyncTask<Void, Void, List<List<LatLng>>>() {
         private lateinit var respObj: GoogleMapDTO
+        private val isAlternative: Boolean = isAlternativeRoute
 
         override fun doInBackground(vararg params: Void?): List<List<LatLng>> {
             val client = OkHttpClient()
@@ -331,13 +338,20 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         }
 
         override fun onPostExecute(result: List<List<LatLng>>) {
+
             for (i in result.indices) {
-                val lineoption = PolylineOptions()
-                lineoption.addAll(result[i])
-                lineoption.width(20f)
-                lineoption.color(Color.BLUE)
-                lineoption.geodesic(true)
-                myMap?.addPolyline(lineoption)
+                val lineOption = PolylineOptions()
+                lineOption.addAll(result[i])
+                lineOption.width(20f)
+
+                if(isAlternative) {
+                    lineOption.color(Color.GRAY)
+                } else {
+                    lineOption.color(Color.BLUE)
+                }
+
+                lineOption.geodesic(true)
+                myMap?.addPolyline(lineOption)
             }
 
             // Assuming there is at least one route
@@ -364,6 +378,7 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
 
 
 
+    // ------------------------------------------------------------------------------------
 
     override fun onMarkerClick(p0: Marker): Boolean {
         // Check if the clicked marker is not null
@@ -387,8 +402,6 @@ class Hotspot : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         // Return false to indicate that the marker click event hasn't been handled
         return false
     }
-
-
 
     // -33.9248683, 18.424055
     private suspend fun populateHotspots(latitude: Double, longitude: Double): List<eBirdAPIHelper.HotspotData> {

@@ -82,13 +82,32 @@
                 android:layout_height="500dp"
                 tools:context=".MapsActivity" />
 
-            <Button
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Get Directions"
-                android:id="@+id/btnGetDirections">
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-            </Button>
+                <Button
+                    android:layout_width="200dp"
+                    android:layout_height="match_parent"
+                    android:text="Get Directions"
+                    android:id="@+id/btnGetDirections">
+
+                </Button>
+
+                <Button
+                    android:id="@+id/btnGetAlternativeDistance"
+                    android:layout_width="176dp"
+                    android:layout_height="match_parent"
+                    android:text="Alternative Route">
+
+                </Button>
+
+
+
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"

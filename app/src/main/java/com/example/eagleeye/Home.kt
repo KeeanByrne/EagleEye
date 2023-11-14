@@ -15,8 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.eagleeye.adapters.SettingsFirebaseAdapter
+import com.example.eagleeye.adapters.SightingFirebaseAdapter
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -27,6 +32,11 @@ import okhttp3.Request
 import kotlin.concurrent.thread
 
 class Home: AppCompatActivity() {
+
+    private lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
+    private lateinit var auth: FirebaseAuth
+    private lateinit var firestore: FirebaseFirestore
+    private lateinit var adapter: SightingFirebaseAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.homepage)
@@ -36,6 +46,17 @@ class Home: AppCompatActivity() {
         val auth = Firebase.auth
         val userid = auth.currentUser?.uid
         Log.d("CurrentUser", "ID: ${userid}")
+
+        // Initialize Firebase components
+        firestore = FirebaseFirestore.getInstance()
+        recyclerView = findViewById(R.id.recyclerView1)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        // Load observations based on the current user's UID
+        loadObservations(auth.currentUser?.uid)
+
+
+
 
         //Setting up the adapter to handle data from firebase
         val settingsFirebaseAdapter = SettingsFirebaseAdapter()
@@ -66,6 +87,7 @@ class Home: AppCompatActivity() {
     // Going to the observations page
     fun handleObservationPageClick(view: View) {
         // Taking the user to the homepage
+
         try {
             val intent = Intent(this@Home, Observations::class.java)
             startActivity(intent)
@@ -108,6 +130,41 @@ class Home: AppCompatActivity() {
             e.printStackTrace()
         }
 
+    }
+
+    private fun loadObservations(userId: String?) {
+        Log.d("Observations", "loadObservations started. userId: $userId")
+
+        if (userId != null) {
+            // Query Firestore to get observations for the current user
+            val query: Query = firestore.collection("sighting")
+                .whereEqualTo("UserID", userId)
+
+            // Create FirestoreRecyclerOptions using the sightings list
+            val options = FirestoreRecyclerOptions.Builder<com.example.eagleeye.models.Sighting>()
+                .setQuery(query, com.example.eagleeye.models.Sighting::class.java)
+                .build()
+
+            // Create a custom adapter to populate the RecyclerView
+            adapter = SightingFirebaseAdapter(options, this)
+
+            // Attach the adapter to the RecyclerView
+            recyclerView.adapter = adapter
+
+            Log.d("Observations", "Adapter set for RecyclerView.")
+        } else {
+            Log.e("Observations", "userId is null.")
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        adapter.startListening()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        adapter.stopListening()
     }
 
 }

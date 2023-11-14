@@ -113,7 +113,12 @@ class Sighting : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
             }
-
+            try {
+                val intent = Intent(this@Sighting, Observations::class.java)
+                startActivity(intent)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
 
         })
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -189,6 +189,7 @@
                     android:layout_marginBottom="8dp"
                     android:background="@drawable/text_border"
                     android:hint="Username"
+                    android:textAlignment="center"
                     android:inputType="text"
                     android:paddingStart="8dp"
                     android:paddingTop="10dp"
@@ -203,6 +204,7 @@
                     android:layout_marginBottom="8dp"
                     android:background="@drawable/text_border"
                     android:hint="Email Address"
+                    android:textAlignment="center"
                     android:inputType="text"
                     android:paddingStart="8dp"
                     android:paddingTop="10dp"
@@ -216,6 +218,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:background="@drawable/text_border"
+                    android:textAlignment="center"
                     android:hint="Password"
                     android:inputType="text"
                     android:paddingStart="8dp"
@@ -231,6 +234,7 @@
                     android:layout_marginBottom="8dp"
                     android:background="@drawable/text_border"
                     android:hint="Password Confirmation"
+                    android:textAlignment="center"
                     android:inputType="text"
                     android:paddingStart="8dp"
                     android:paddingTop="10dp"
@@ -262,4 +266,4 @@
     </LinearLayout>
 
 
-</RelativeLayout>
+</ScrollView>

@@ -62,5 +62,7 @@ class SightingFirebaseAdapter(
             textLatinName.text = "Latin Name: ${sighting.LatinName}"
             textLocation.text = "Location: ${sighting.Location}"
         }
+
+
     }
 }

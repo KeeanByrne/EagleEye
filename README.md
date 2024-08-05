@@ -1,0 +1,1 @@
+A Kotlin-based mobile application designed for bird enthusiasts to spot and record bird sightings and their locations. The app enables users to log bird sightings, view their locations on a map, and review their recorded observations.

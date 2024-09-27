@@ -4,11 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="#A0BFE2">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -51,11 +55,13 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:contentDescription="Image representing something"
-                        android:src="@drawable/settingstwo_icon"
+                        android:src="@drawable/settings_cog"
                         android:scaleType="centerCrop"
+                        android:onClick="handleSettingsPageClick"
                         />
 
                     <ImageView
+                        android:id="@+id/profilePic"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:contentDescription="Image representing something"
@@ -102,27 +108,51 @@
 
                 <!-- cards for the bird observation -->
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/recentSighting1"
                     android:layout_width="105dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="30dp"
+                    app:cardCornerRadius="25dp"
                     android:orientation="vertical"
                     >
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerView1"
+                        android:layout_width="match_parent"
+                        android:layout_height="550dp"
+                        android:layout_weight="1" />
 
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/recentSighting2"
                     android:layout_width="105dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="30dp"
+                    app:cardCornerRadius="25dp"
                     android:orientation="vertical"
                     >
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="550dp"
+                        android:layout_weight="1" />
 
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/recentSighting3"
                     android:layout_width="105dp"
                     android:layout_height="match_parent"
+                    app:cardCornerRadius="25dp"
                     android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerView3"
+                        android:layout_width="match_parent"
+                        android:layout_height="550dp"
+                        android:layout_weight="1" />
 
                 </androidx.cardview.widget.CardView>
 
@@ -145,7 +175,7 @@
                 android:layout_height="wrap_content"
                 android:text="Menu"
                 android:textSize="18sp"
-                android:textColor="#000000"
+                android:textColor="#C1E1C1"
                 android:layout_marginTop="8dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
@@ -163,8 +193,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_margin="16dp"
-                    app:cardCornerRadius="8dp"
-                    >
+                    app:cardCornerRadius="25dp"
+                    android:onClick="handleObservationPageClick">
+                >
 
                     <!-- Observation info -->
                     <LinearLayout
@@ -189,6 +220,7 @@
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp"
                                 />
+
 
                         </LinearLayout>
 
@@ -215,7 +247,77 @@
                                 android:id="@+id/observationsSubHeading"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Record and view observations"
+                                android:text="View observations"
+                                android:textStyle="bold">
+
+                            </TextView>
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- Sightings -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_margin="16dp"
+                    app:cardCornerRadius="25dp"
+                    android:onClick="handleSightingPageClick">
+                    >
+
+                    <!-- Sightings info -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+
+                        <!-- Sightings Image -->
+                        <LinearLayout
+                            android:layout_width="100dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            >
+
+                            <ImageView
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:contentDescription="Image representing something"
+                                android:src="@drawable/binoculars_icon"
+                                android:scaleType="centerCrop"
+                                android:layout_marginLeft="16dp"
+                                android:layout_marginRight="16dp"
+                                />
+
+                        </LinearLayout>
+
+                        <!-- Sightings Text-->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:gravity="center_vertical"
+
+                            >
+
+                            <TextView
+                                android:id="@+id/sightingsHeading"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Sightings"
+                                android:textSize="20dp"
+                                android:textStyle="bold">
+
+                            </TextView>
+
+                            <TextView
+                                android:id="@+id/sightingsSubHeading"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Record Your Sightings"
                                 android:textStyle="bold">
 
                             </TextView>
@@ -232,8 +334,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_margin="16dp"
-                    app:cardCornerRadius="8dp"
-
+                    app:cardCornerRadius="25dp"
+                    android:onClick="handleHotspotPageClick">
                     >
 
                     <!-- Birding Hotspot info -->
@@ -303,15 +405,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_margin="16dp"
-                    app:cardCornerRadius="8dp"
-                    >
+                    app:cardCornerRadius="25dp"
+                    android:onClick="handleSettingsPageClick">
 
                     <!-- Settings info -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal">
-
 
                         <!-- Settings Image -->
                         <LinearLayout
@@ -324,7 +425,7 @@
                                 android:layout_width="60dp"
                                 android:layout_height="60dp"
                                 android:contentDescription="Image representing something"
-                                android:src="@drawable/settingstwo_icon"
+                                android:src="@drawable/settings_cog"
                                 android:scaleType="centerCrop"
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp"
@@ -344,7 +445,7 @@
                                 android:id="@+id/settingsHeading"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Birding Hotspot"
+                                android:text="Settings"
                                 android:textSize="20dp"
                                 android:textStyle="bold">
 
@@ -371,5 +472,6 @@
 
 
     </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

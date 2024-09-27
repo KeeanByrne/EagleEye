@@ -6,9 +6,11 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.eagleeye.databinding.HomepageBinding
+import com.google.firebase.auth.FirebaseAuth
 
 class Login : AppCompatActivity() {
 
@@ -21,6 +23,7 @@ class Login : AppCompatActivity() {
 
         // Button to check if the user account exists.
         btn_login = findViewById(R.id.btnLogin);
+
         btn_login.setOnClickListener {
             var text_username = findViewById<EditText>(R.id.editUsername);
             var username = text_username.text.toString();
@@ -33,6 +36,12 @@ class Login : AppCompatActivity() {
 
         }
 
+        val registerText = findViewById<TextView>(R.id.registerText)
+        registerText.setOnClickListener{
+            val intent = Intent(this,Signup::class.java)
+            startActivity(intent)
+        }
+
 
 
     }
@@ -40,15 +49,15 @@ class Login : AppCompatActivity() {
     // Checking if the user account exists.
     fun checkUserAccount(usernameCheck: String, passwordCheck: String) {
 
-        // Creating an object for the database process to read the information.
+        //Old SQLite code
+        /*// Creating an object for the database process to read the information.
         val db = DBHelper(this, null)
 
         val userExists = db.checkUser(usernameCheck, passwordCheck);
 
         // Checking if the user exists.
         if(userExists) {
-            Toast.makeText(this, "User exists!", Toast.LENGTH_SHORT).show()
-
+            *//*Toast.makeText(this, "User exists!", Toast.LENGTH_SHORT).show()*//*
             // Creating the session for the user by storing the ID.
             startSession(usernameCheck);
 
@@ -57,9 +66,34 @@ class Login : AppCompatActivity() {
             startActivity(intent)
 
         } else {
-            Toast.makeText(this, "User does not exist!", Toast.LENGTH_SHORT).show()
-        }
+            Toast.makeText(this, "Your Username And/Or Password Is Incorrect!", Toast.LENGTH_SHORT).show()
+        }*/
 
+        //New firebase code
+        val auth = FirebaseAuth.getInstance()
+
+        auth.signInWithEmailAndPassword(usernameCheck, passwordCheck)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    val user = auth.currentUser
+                    Toast.makeText(
+                        this@Login, "Authentication succeeded.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    // Now you can navigate to the homepage or do any other post-login actions
+                    val intent = Intent(this@Login, Home::class.java)
+                    startActivity(intent)
+                    finish() // Close the login activity to prevent going back on successful login
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Toast.makeText(
+                        this@Login, "Authentication failed. Incorrect username or password.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
 
     }
 
